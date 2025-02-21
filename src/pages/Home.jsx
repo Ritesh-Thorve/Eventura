@@ -1,18 +1,71 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useEvents } from '../contexts/EventContext';
-import EventCard from '../components/EventCard';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEvents } from '../contexts/EventContext'
+ 
 
 export default function Home() {
+
+  const venues = [
+    {
+      title: "Hotel Silver Palace",
+      image: "banquet_1.webp",
+      description: "Luxury hotels for your events",
+      location: "New York, USA",
+    },
+    {
+      title: "Gardens Aditya",
+      image: "garden1.avif",
+      description: "Beautiful outdoor spaces",
+      location: "Los Angeles, USA",
+    },
+    {
+      title: "Wedding Venues",
+      image: "hotel1.jpg",
+      description: "Perfect for your special day",
+      location: "Paris, France",
+    },
+    {
+      title: "Banquet Halls",
+      image: "banquet_1.webp",
+      description: "Spacious halls for large gatherings",
+      location: "Dubai, UAE",
+    },{
+      title: "Hotel Silver Palace",
+      image: "Hotel_2.jpg",
+      description: "Luxury hotels for your events",
+      location: "New York, USA",
+    },
+    {
+      title: "Gardens Aditya",
+      image: "garden_2.jpg",
+      description: "Beautiful outdoor spaces",
+      location: "Los Angeles, USA",
+    },
+    {
+      title: "Wedding Venues",
+      image: "bunquet_2.jpg",
+      description: "Perfect for your special day",
+      location: "Paris, France",
+    },
+    {
+      title: "Banquet Halls",
+      image: "weddign_img_1.jpg",
+      description: "Spacious halls for large gatherings",
+      location: "Dubai, UAE",
+    },
+    
+  ];
+
   const { events, fetchEvents, loading } = useEvents();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchEvents();
   }, []);
 
  // Debugging: Check if events is an array
+ 
 
-  const featuredEvents = Array.isArray(events) ? events.slice(0, 3) : [];
 
   return (
     <div className="bg-gray-50">
@@ -34,7 +87,7 @@ export default function Home() {
             </p>
             <Link
               to="/events"
-              className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-indigo-700 transition-colors"
+              className="inline-block bg-pink-500 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-red-600 transition-colors"
             >
               Explore Venues
             </Link>
@@ -43,38 +96,48 @@ export default function Home() {
       </div>
 
       {/* Featured Venues Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Venues</h2>
-        
-        {loading ? (
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      <div className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Venues</h2>
+          
+        {/* mapping venue categories */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {venues.map((venue, index) => (
+        <div
+          key={index}
+          className="relative rounded-lg overflow-hidden group cursor-pointer"
+          onClick={() => navigate(`/venue/${venue.title.replace(/\s+/g, "-").toLowerCase()}`)}
+        >
+          <img
+            src={venue.image}
+            alt={venue.title}
+            className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity group-hover:bg-opacity-50"></div>
+
+          {/* Location appears on hover */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <p className="text-lg font-semibold text-white bg-black bg-opacity-70 px-4 py-2 rounded-lg">
+              {venue.location}
+            </p>
           </div>
-        ) : featuredEvents.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredEvents.map((event) => (
-              <EventCard key={event.id} {...event} />
-            ))}
+
+          <div className="absolute inset-0 flex flex-col justify-end p-6">
+            <h3 className="text-xl font-semibold text-white mb-2">{venue.title}</h3>
+            <p className="text-gray-200">{venue.description}</p>
           </div>
-        ) : (
-          <p className="text-center text-gray-600">No featured events available</p>
-        )}
-        
-        <div className="text-center mt-12">
-          <Link
-            to="/events"
-            className="inline-block bg-white text-indigo-600 px-8 py-3 rounded-md text-lg font-semibold border-2 border-indigo-600 hover:bg-indigo-50 transition-colors"
-          >
-            View All Venues
-          </Link>
+        </div>
+      ))}
+    </div>  
         </div>
       </div>
 
       {/* Categories Section */}
-      <div className="bg-white py-16">
+      <div className="bg-white py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Venue Categories</h2>
           
+        {/* mapping venue categories */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
@@ -84,7 +147,7 @@ export default function Home() {
               },
               {
                 title: 'Gardens',
-                image: 'https://images.unsplash.com/photo-1464158426056-acbba9645b9b?ixlib=rb-4.0.3',
+                image: 'garden_img_featured_venue.jpg',
                 description: 'Beautiful outdoor spaces'
               },
               {
@@ -111,6 +174,7 @@ export default function Home() {
                 </div>
               </div>
             ))}
+            
           </div>
         </div>
       </div>

@@ -48,7 +48,7 @@ export default function Footer() {
         </div>
         
         <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Eventura. All rights reserved.</p>
+          <p>&copy; 2025 Eventura. All rights reserved.</p>
         </div>
       </div>
     </footer>

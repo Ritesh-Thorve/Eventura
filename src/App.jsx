@@ -16,7 +16,7 @@ function App() {
     <Router>
       <AuthProvider>
         <EventProvider>
-          <div className="min-h-screen flex flex-col">
+          <div className="zmin-h-screen flex flex-col">
             <Navbar />
             <main className="flex-grow">
               <Routes>
