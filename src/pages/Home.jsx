@@ -1,17 +1,12 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useEvents } from '../contexts/EventContext'
+import React  from 'react';
+import { Link, useNavigate } from 'react-router-dom'; 
 import FeaturedVenues from '../components/venues/FeaturedVenues';
 import VenueCategories from '../components/venues/VenueCategories';
+import BookingSteps from '../components/Booking/BookingSteps';
  
 
-export default function Home() {
-  const { events, fetchEvents, loading } = useEvents();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchEvents();
-  }, []); 
+export default function Home() { 
+  const navigate = useNavigate(); 
 
   return (
     <div className="bg-gray-50">
@@ -44,8 +39,11 @@ export default function Home() {
       {/* Featured Venues Section */}
        <FeaturedVenues/>
 
-      {/* Categories Section */}
+      {/* Categories Section component*/}
        <VenueCategories/>
+ 
+      {/*Booking step component */}
+       <BookingSteps/>
     </div>
   );
 }

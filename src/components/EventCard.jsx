@@ -12,7 +12,7 @@ export default function EventCard({
   capacity
 }) {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
+    <div className="bg-white rounde d-lg shadow-md overflow-hidden transition-transform hover:scale-105">
       <img
         src={image}
         alt={title}

@@ -32,13 +32,15 @@ export default function Register() {
 
     try {
       // Replace with your API endpoint
-      await axios.post('/api/auth/register', {
+      await axios.post('http://localhost:8000/api/auth/register', {
         name: formData.name,
         email: formData.email,
         password: formData.password
       });
+      
       navigate('/login');
     } catch (err) {
+      console.log(err)
       setError('Failed to create account. Please try again.');
     } finally {
       setLoading(false);

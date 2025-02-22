@@ -8,27 +8,27 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-white   shadow-lg">
+    <nav className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-lg z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link to="/" className="flex items-center">
-              <Calendar className="h-8 w-8 text-indigo-600" />
-              <span className="ml-2 text-2xl font-bold text-gray-900">Eventura</span>
+              <Calendar className="h-8 w-8 text-white" />
+              <span className="ml-2 text-2xl font-bold c">Eventura</span>
             </Link>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden sm:flex sm:items-center">
-            <Link to="/" className="px-3 py-2 text-gray-800 hover:text-indigo-300">
+          <div className="hidden sm:flex sm:items-center ">
+            <Link to="/" className="px-3 py-2 text-white hover:text-indigo-300">
               Home
             </Link>
-            <Link to="/events" className="px-3 py-2 text-gray-800 hover:text-indigo-300">
+            <Link to="/events" className="px-3 py-2 text-white hover:text-indigo-300">
               Events
             </Link>
             {user ? (
               <>
-                <Link to="/booking" className="px-3 py-2 text-gray-800 hover:text-indigo-300">
+                <Link to="/booking" className="px-3 py-2 text-white hover:text-indigo-300">
                   Book Venue
                 </Link>
                 <button
@@ -53,7 +53,7 @@ export default function Navbar() {
           <div className="sm:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-800 hover:text-indigo-300"
+              className="text-white hover:text-indigo-300"
             >
               {isOpen ? (
                 <X className="h-6 w-6" />
@@ -71,14 +71,14 @@ export default function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className="block px-3 py-2 text-gray-800 hover:text-indigo-300"
+              className="block px-3 py-2 text-white hover:text-indigo-300"
               onClick={() => setIsOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/events"
-              className="block px-3 py-2 text-gray-800 hover:text-indigo-300"
+              className="block px-3 py-2 text-white hover:text-indigo-300"
               onClick={() => setIsOpen(false)}
             >
               Events
@@ -87,7 +87,7 @@ export default function Navbar() {
               <>
                 <Link
                   to="/booking"
-                  className="block px-3 py-2 text-gray-800 hover:text-indigo-300"
+                  className="block px-3 py-2 text-white hover:text-indigo-300"
                   onClick={() => setIsOpen(false)}
                 >
                   Book Venue

@@ -4,8 +4,7 @@ import { motion } from "framer-motion";
 const venueCategories = [
   {
     title: "Hotels",
-    image:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3",
+    image: "Hotels.jpg",
     description: "Luxury hotels for your events",
   },
   {
@@ -15,14 +14,12 @@ const venueCategories = [
   },
   {
     title: "Wedding ",
-    image:
-      "wedding_Event.webp",
+    image: "wedding_Event.webp",
     description: "Perfect for your special day",
   },
   {
     title: "Banquet Halls",
-    image:
-      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-4.0.3",
+    image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-4.0.3",
     description: "Halls for large gatherings",
   },
 ];
