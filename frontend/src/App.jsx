@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { EventProvider } from './contexts/EventContext';
+import { AuthProvider } from './contexts/AuthContext'; 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Events from './pages/Events';
+import Home from './pages/Home'; 
 import Booking from './pages/Booking';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -14,14 +12,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <EventProvider>
+      <AuthProvider> 
           <div className="zmin-h-screen flex flex-col">
             <Navbar />
             <main className="flex-grow">
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/events" element={<Events />} />
+                <Route path="/" element={<Home />} /> 
                 <Route path="/booking" element={
                   <ProtectedRoute>
                     <Booking />
@@ -32,8 +28,7 @@ function App() {
               </Routes>
             </main>
             <Footer />
-          </div>
-        </EventProvider>
+          </div> 
       </AuthProvider>
     </Router>
   );

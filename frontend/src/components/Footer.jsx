@@ -1,5 +1,5 @@
 import React from "react";
-import { Facebook, Twitter, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Twitter, Instagram, Mail, Phone,HelpCircle, MoveRight } from "lucide-react";
 
 export default function Footer() {
   const socialLinks = [
@@ -18,7 +18,12 @@ export default function Footer() {
             <p className="text-gray-400">
               Your premier destination for event venue bookings. Find and book the perfect space for your next event.
             </p>
-          </div>
+             <div className="flex gap-1 my-2 items-center">   
+            <HelpCircle className="h-5 w-5 mr-2"/>
+             <a href="/" className="text-gray-400">Want to register your hotel</a>
+             <MoveRight className="h-5 w-5 mr-2 mt-1 ml-1"/>
+             </div>
+          </div>  
 
           {/* Contact Section */}
           <div>

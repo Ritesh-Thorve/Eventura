@@ -24,12 +24,12 @@ export default function Navbar() {
               Home
             </Link>
             <Link to="/events" className="px-3 py-2 text-white hover:text-indigo-300">
-              Events
+              Venues
             </Link>
             {user ? (
               <>
                 <Link to="/booking" className="px-3 py-2 text-white hover:text-indigo-300">
-                  Book Venue
+                  Booked Venue
                 </Link>
                 <button
                   onClick={logout}

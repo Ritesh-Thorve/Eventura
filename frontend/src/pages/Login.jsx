@@ -15,16 +15,18 @@ export default function Login() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
+  
     try {
       await login(email, password);
       navigate('/');
+      window.location.reload(); // Reload the page after navigation
     } catch (err) {
       setError('Invalid email or password');
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
