@@ -12,20 +12,37 @@ function Venues() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/venues')
-      .then(response => {
-        setVenues(response.data);
+    const fetchVenues = async () => {
+      setLoading(true);
+      const token = localStorage.getItem('token'); // Get token from localStorage
+
+      if (!token) {
+        setError('You must be logged in to view venues.');
+        toast.error('You must be logged in to view venues.');
         setLoading(false);
-      })
-      .catch(err => {
+        return;
+      }
+
+      try {
+        const response = await axios.get('http://localhost:8000/api/venues', {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token in headers
+          },
+        });
+        setVenues(response.data);
+      } catch (err) {
         setError('Failed to load venues');
         toast.error('Failed to load venues');
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchVenues();
   }, []);
 
   const handleViewProfile = (id) => {
-    setSelectedVenueId(id); // Pass the selected venue ID
+    setSelectedVenueId(id); // Set selected venue ID
   };
 
   return (
@@ -40,7 +57,7 @@ function Venues() {
           {venues.map((venue) => (
             <VenueCard
               key={venue._id}
-              id={venue._id}  // Make sure to use _id from MongoDB
+              id={venue._id} // Use _id from MongoDB
               name={venue.name}
               imageUrl={venue.imageUrl}
               capacity={venue.capacity}
