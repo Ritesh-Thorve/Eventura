@@ -8,6 +8,7 @@ import Booking from './pages/Booking';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import Venues from './pages/Venues';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} /> 
+                <Route path="/venues" element={<Venues />} /> 
                 <Route path="/booking" element={
                   <ProtectedRoute>
                     <Booking />

@@ -8,7 +8,7 @@ function FeaturedVenues() {
     const venues = [
         {
             title: "Hotel Silver Palace",
-            image: "banquet_1.webp",
+            image: "hotel_silver_palace.jpg",
             description: "Premium venues, flawless experiences, unforgettable events!",
             location: "Jalgaon, MH",
             path: '#',

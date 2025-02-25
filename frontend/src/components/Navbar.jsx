@@ -23,7 +23,7 @@ export default function Navbar() {
             <Link to="/" className="px-3 py-2 text-white hover:text-indigo-300">
               Home
             </Link>
-            <Link to="/events" className="px-3 py-2 text-white hover:text-indigo-300">
+            <Link to="/venues" className="px-3 py-2 text-white hover:text-indigo-300">
               Venues
             </Link>
             {user ? (
