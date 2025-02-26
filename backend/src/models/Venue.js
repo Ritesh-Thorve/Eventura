@@ -8,6 +8,7 @@ const venueSchema = new mongoose.Schema({
   location: { type: String, required: true },
   services: { type: [String], required: true },
   amenities: { type: [String], required: true },
+  price: { type: Number, required: true }, // Added price field
   contact: {
     phone: { type: String, required: true },
     email: { type: String, required: true },

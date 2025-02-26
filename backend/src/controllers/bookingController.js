@@ -2,26 +2,23 @@ const Booking = require('../models/Booking');
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
-    try {
-        console.log("Received data:", req.body);
+    try { 
+        const { name, email, phone, location, eventType, eventDate, venueName } = req.body;
 
-        const { name, email, phone, location, eventType, timeSlot, venueName } = req.body;
-
-        if (!email) {
-            console.error("Error: Email is missing!");
-            return res.status(400).json({ message: "Email is required" });
+        if (!email || !eventDate) { 
+            return res.status(400).json({ message: "Email and event date are required" });
         }
 
-        const newBooking = new Booking({ name, email, phone, location, eventType, timeSlot, venueName });
+        const newBooking = new Booking({ name, email, phone, location, eventType, eventDate, venueName });
 
         await newBooking.save();
         res.status(201).json({ message: "Booking successful" });
 
-    } catch (error) {
-        console.error("Server error:", error);
+    } catch (error) { 
         res.status(500).json({ message: "Internal Server Error", error });
     }
 };
+
 
 // Get bookings for the logged-in user
 exports.getAllBookings = async (req, res) => {

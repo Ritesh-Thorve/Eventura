@@ -3,14 +3,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { X } from 'lucide-react';
 
-const timeSlots = [
-  { id: '1', time: '10:00 AM', available: true },
-  { id: '2', time: '11:00 AM', available: true },
-  { id: '3', time: '2:00 PM', available: true },
-  { id: '4', time: '3:00 PM', available: true },
-  { id: '5', time: '4:00 PM', available: true },
-];
-
 const eventTypes = [
   'Wedding',
   'Corporate Event',
@@ -28,7 +20,7 @@ export function BookingForm({ venue, onClose }) {
     phone: '',
     location: '',
     eventType: eventTypes[0],
-    timeSlot: '',
+    eventDate: '',
   });
 
   const handleSubmit = async (e) => {
@@ -80,14 +72,14 @@ export function BookingForm({ venue, onClose }) {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email </label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
                 id="email"
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 value={formData.email}
-                placeholder='Enter logIn email'
+                placeholder="Enter login email"
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />
             </div>
@@ -132,28 +124,15 @@ export function BookingForm({ venue, onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Available Time Slots</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {timeSlots.map((slot) => (
-                  <label
-                    key={slot.id}
-                    className={
-                      `flex items-center justify-center px-4 py-2 border rounded-lg cursor-pointer ` +
-                      (formData.timeSlot === slot.time ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:border-indigo-500')
-                    }
-                  >
-                    <input
-                      type="radio"
-                      name="timeSlot"
-                      value={slot.time} // Send time instead of ID
-                      checked={formData.timeSlot === slot.time}
-                      onChange={(e) => setFormData({ ...formData, timeSlot: e.target.value })}
-                      className="sr-only"
-                    />
-                    {slot.time}
-                  </label>
-                ))}
-              </div>
+              <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700 mb-1">Event Date</label>
+              <input
+                type="date"
+                id="eventDate"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                value={formData.eventDate}
+                onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
+              />
             </div>
 
             <div className="pt-4">

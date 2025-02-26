@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaMapMarkerAlt, FaClock, FaCalendarAlt, FaTrash } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaCalendarAlt, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 function MyBookings() {
@@ -59,19 +59,27 @@ function MyBookings() {
       <div className="max-w-5xl mx-auto">
         {bookings.length > 0 ? (
           bookings.map((booking) => (
-            <div key={booking._id} className="bg-gray-50 shadow-md rounded-xl p-6 mb-6 hover:shadow-lg hover:-translate-y-1">
+            <div key={booking._id} className="bg-gray-50 shadow-md rounded-xl p-6 mb-6 hover:shadow-lg hover:-translate-y-1 transition">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-3">
                 <FaCalendarAlt className="text-blue-500" /> {booking.venueName}
               </h2>
               
               <div className="space-y-3 text-gray-700">
-                <p className="flex items-center gap-2 text-lg"><FaMapMarkerAlt className="text-red-500" /> {booking.location}</p>
-                <p className="flex items-center gap-2 text-lg"><FaClock className="text-blue-500" /> {booking.timeSlot}</p>
-                <p className="flex items-center gap-2 text-lg">🏷️ {booking.eventType}</p>
-                <p className="text-lg mt-3 font-bold flex items-center gap-2">Status: {booking.status}</p>
+                <p className="flex items-center gap-2 text-lg">
+                  <FaMapMarkerAlt className="text-red-500" /> {booking.location}
+                </p>
+                <p className="flex items-center gap-2 text-lg">
+                  📅 {new Date(booking.eventDate).toLocaleDateString()}
+                </p>
+                <p className="flex items-center gap-2 text-lg">
+                  🏷️ {booking.eventType}
+                </p>
               </div>
 
-              <button onClick={() => deleteBooking(booking._id)} className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <button 
+                onClick={() => deleteBooking(booking._id)} 
+                className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+              >
                 <FaTrash /> Delete Booking
               </button>
             </div>
