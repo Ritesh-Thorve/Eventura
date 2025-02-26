@@ -46,9 +46,9 @@ function Venues() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+        <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-10">
           Find Your Perfect Venue
         </h1>
         {loading && <p className="text-center text-gray-700">Loading venues...</p>}

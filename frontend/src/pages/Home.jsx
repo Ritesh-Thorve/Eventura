@@ -27,7 +27,7 @@ export default function Home() {
               Book amazing spaces for your next event
             </p>
             <Link
-              to="/events"
+              to="/venues"
               className="inline-block bg-pink-500 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-red-600 transition-colors"
             >
               Explore Venues

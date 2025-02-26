@@ -4,7 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home'; 
-import Booking from './pages/Booking';
+import MyBookings from './pages/MyBookings';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -20,9 +20,9 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} /> 
                 <Route path="/venues" element={<Venues />} /> 
-                <Route path="/booking" element={
+                <Route path="/mybookings" element={
                   <ProtectedRoute>
-                    <Booking />
+                    <MyBookings />
                   </ProtectedRoute>
                 } />
                 <Route path="/login" element={<Login />} />

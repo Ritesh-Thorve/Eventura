@@ -28,8 +28,8 @@ export default function Navbar() {
             </Link>
             {user ? (
               <>
-                <Link to="/booking" className="px-3 py-2 text-white hover:text-indigo-300">
-                  Booked Venue
+                <Link to="/mybookings" className="px-3 py-2 text-white hover:text-indigo-300">
+                  My Bookings
                 </Link>
                 <button
                   onClick={logout}
