@@ -5,7 +5,7 @@ const Venue = require('../models/Venue');
 const router = express.Router();
 
 router.get('/', getVenues);
-router.post('/', createVenue); 
+router.post('/create', createVenue); 
 
 // Get a single venue by ID
 router.get('/:id', async (req, res) => {

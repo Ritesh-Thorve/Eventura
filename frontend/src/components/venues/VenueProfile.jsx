@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { X, Users, MapPin, Calendar, Clock, Phone, Mail } from 'lucide-react';
+import { X, Users, MapPin, Calendar, Clock, Phone, Mail, IndianRupee, CheckCircle } from 'lucide-react';
 import { BookingForm } from '../Booking/BookingForm';
 
 export function VenueProfile({ venueId, onClose }) {
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [showBookingForm, setShowBookingForm] = useState(false); // <-- Fix: Add missing state
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   useEffect(() => {
     const fetchVenueDetails = async () => {
@@ -72,6 +72,10 @@ export function VenueProfile({ venueId, onClose }) {
                   <span>{venue.location}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
+                  <IndianRupee className="text-indigo-600" />
+                  <span>Price: ₹{venue.price.toLocaleString()}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
                   <Calendar className="text-indigo-600" />
                   <span>{venue.availability?.days || 'Not specified'}</span>
                 </div>
@@ -95,6 +99,35 @@ export function VenueProfile({ venueId, onClose }) {
                     {venue.contact?.email || 'N/A'}
                   </a>
                 </div>
+              </div>
+            </div>
+
+            {/* Services & Amenities - Two Columns */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Services Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Services</h3>
+                <ul className="mt-2 space-y-2">
+                  {venue.services.map((service, index) => (
+                    <li key={index} className="flex items-center gap-2 text-gray-700">
+                      <CheckCircle className="text-green-500" />
+                      {service}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Amenities Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Amenities</h3>
+                <ul className="mt-2 space-y-2">
+                  {venue.amenities.map((amenity, index) => (
+                    <li key={index} className="flex items-center gap-2 text-gray-700">
+                      <CheckCircle className="text-blue-500" />
+                      {amenity}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 

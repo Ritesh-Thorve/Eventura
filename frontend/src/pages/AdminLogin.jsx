@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Calendar, Loader2 } from 'lucide-react';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 
-export default function Login() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
+export default function AdminLogin() {
+  const { login } = useAdminAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,18 +19,13 @@ export default function Login() {
 
     try {
       await login(email, password);
-      navigate('/');
-      window.location.reload();
-    } catch (err) {
-      setError('Invalid email or password');
+      navigate('/admin');
+    } catch {
+      setError('Invalid credentials');
     } finally {
       setLoading(false);
     }
   };
-
-  const handleNavigate = () => {
-    navigate('/admin-login')
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
@@ -40,13 +35,7 @@ export default function Login() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">Sign in to Eventura</h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Or{' '}
-          <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500 transition">
-            create a new account
-          </Link>
-        </p>
+        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">Admin Login</h2>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           <div>
@@ -97,13 +86,6 @@ export default function Login() {
             className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out disabled:bg-indigo-400"
           >
             {loading ? <Loader2 className="animate-spin w-5 h-5 mr-2" /> : 'Sign in'}
-          </button>
-
-          <button  
-            onClick={handleNavigate}
-            className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out disabled:bg-indigo-400"
-          >
-             Log In As Admin
           </button>
         </form>
       </motion.div>
