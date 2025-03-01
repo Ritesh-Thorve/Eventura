@@ -5,11 +5,8 @@ const { protect } = require('../middleware/authMiddleware');
 
 // POST - Create a booking
 router.post('/addbookings', createBooking);
-
 // GET - Fetch all bookings for the logged-in user
-router.get('/mybookings', protect, getAllBookings);
-
-// DELETE - Delete a booking (fixed route)
+router.get('/mybookings', protect, getAllBookings); 
 router.delete('/:id', protect, deleteBooking);
 
 module.exports = router;

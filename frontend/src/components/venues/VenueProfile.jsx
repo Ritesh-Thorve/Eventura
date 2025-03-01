@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { X, Users, MapPin, Calendar, Clock, Phone, Mail, IndianRupee, CheckCircle } from 'lucide-react';
 import { BookingForm } from '../Booking/BookingForm';
+import { useAuth } from '../../contexts/AuthContext'; // Import Auth Context
+import { toast } from 'react-toastify';
 
 export function VenueProfile({ venueId, onClose }) {
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const { user } = useAuth(); // Get logged-in user
 
   useEffect(() => {
     const fetchVenueDetails = async () => {
@@ -25,6 +28,18 @@ export function VenueProfile({ venueId, onClose }) {
       fetchVenueDetails();
     }
   }, [venueId]);
+
+  const handleBookAppointment = () => {
+    if (!user) {
+      toast.error('You need to log in to book an appointment!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+    setShowBookingForm(true);
+  };
 
   if (loading) {
     return <div className="text-center py-10">Loading venue details...</div>;
@@ -133,7 +148,7 @@ export function VenueProfile({ venueId, onClose }) {
 
             <div className="mt-6">
               <button
-                onClick={() => setShowBookingForm(true)}
+                onClick={handleBookAppointment}
                 className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 Book an Appointment

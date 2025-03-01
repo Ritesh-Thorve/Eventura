@@ -1,12 +1,24 @@
 import React from "react";
-import { Facebook, Twitter, Instagram, Mail, Phone,HelpCircle, MoveRight } from "lucide-react";
+import { Facebook, Twitter, Instagram, Mail, Phone,HelpCircle, MoveRight } from "lucide-react"; 
+import { Link } from "react-router-dom";
 
-export default function Footer() {
+export default function Footer() { 
   const socialLinks = [
     { href: "https://facebook.com/eventura", icon: Facebook, label: "Facebook" },
     { href: "https://twitter.com/eventura", icon: Twitter, label: "Twitter" },
     { href: "https://instagram.com/eventura", icon: Instagram, label: "Instagram" },
   ];
+
+  const AboutIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-6 h-6 text-white"
+    >
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+    </svg>
+  );
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -20,7 +32,7 @@ export default function Footer() {
             </p>
              <div className="flex gap-1 my-2 items-center">   
             <HelpCircle className="h-5 w-5 mr-2"/>
-             <a href="/" className="text-gray-400">Want to register your hotel</a>
+             <a href="/about" className="text-gray-400 hover:text-white">Want to register your hotel</a>
              <MoveRight className="h-5 w-5 mr-2 mt-1 ml-1"/>
              </div>
           </div>  
@@ -37,10 +49,15 @@ export default function Footer() {
               </div>
               <div className="flex items-center">
                 <Phone className="h-5 w-5 mr-2" />
-                <a href="tel:+1234567890" className="text-gray-400 hover:text-white">
+                <a href="tel:+911234567890" className="text-gray-400 hover:text-white">
                   (+91) 12345 67890
                 </a>
               </div>
+
+                <div className="flex items-center gap-3">
+                <AboutIcon/>
+                <Link to="/about" className="block py-2 text-gray-400 hover:text-white">About</Link>
+                </div>
             </div>
           </div>
 

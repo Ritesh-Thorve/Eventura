@@ -5,9 +5,7 @@ const connectDB = require('./src/config/db');
 const authRoute = require('./src/routes/authRoute');
 const venueRoute = require('./src/routes/venueRoutes');
 const bookingRoute = require('./src/routes/bookingRoute');
-const adminRoute = require('./src/routes/adminRoute');
-// const userRoutes = require('./routes/userRoutes');
-
+const adminRoute = require('./src/routes/adminRoute'); 
 dotenv.config();
 connectDB();
 
@@ -15,8 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
-// app.use('/api/users', userRoutes);
+ 
 app.use('/api/auth', authRoute);
 app.use('/api/venues', venueRoute);
 app.use('/api/bookings', bookingRoute);

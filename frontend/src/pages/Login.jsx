@@ -28,9 +28,7 @@ export default function Login() {
     }
   };
 
-  const handleNavigate = () => {
-    navigate('/admin-login')
-  }
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
@@ -99,12 +97,7 @@ export default function Login() {
             {loading ? <Loader2 className="animate-spin w-5 h-5 mr-2" /> : 'Sign in'}
           </button>
 
-          <button  
-            onClick={handleNavigate}
-            className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out disabled:bg-indigo-400"
-          >
-             Log In As Admin
-          </button>
+           
         </form>
       </motion.div>
     </div>

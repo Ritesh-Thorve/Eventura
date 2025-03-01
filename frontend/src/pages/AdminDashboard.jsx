@@ -38,6 +38,17 @@ export default function AdminDashboard() {
     }
   };
 
+  const VenueIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-6 h-6 text-gray-700"
+    >
+      <path d="M12 2L2 7v2h20V7l-10-5zM4 10v10h2v-6h2v6h2v-6h4v6h2v-6h2v6h2V10H4zm-2 10h20v2H2v-2z"/>
+    </svg>
+  );
+
   return (
     <div className="min-h-screen bg-white py-24 px-6">
       {/* <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-10"> Admin Dashboard</h1> */}
@@ -54,12 +65,12 @@ export default function AdminDashboard() {
             bookings.map((booking) => (
               <div key={booking._id} className="bg-gray-50 shadow-md rounded-xl p-6 mb-6 hover:shadow-lg hover:-translate-y-1 transition">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-3">
-                  <FaCalendarAlt className="text-blue-500" /> {booking.venueName || "Venue Name Missing"}
+                  <VenueIcon /> {booking.venueName || "Venue Name Missing"}
                 </h2>
 
                 <div className="space-y-3 text-gray-700">
                   <p className="flex items-center gap-2 text-lg">
-                    <FaMapMarkerAlt className="text-red-500" /> {booking.location|| "Location Missing"}
+                     <FaMapMarkerAlt className="text-red-500 " />  {booking.location|| "Location Missing"}
                   </p>
                   <p className="flex items-center gap-2 text-lg">
                     📅 {booking.eventDate ? new Date(booking.eventDate).toLocaleDateString("en-GB") : "Date Missing"}

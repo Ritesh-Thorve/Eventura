@@ -36,7 +36,7 @@ const VenueCategories = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text">
-            Venue Categories
+             Categories
           </span>
           <span className="block w-16 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mt-2"></span>
         </motion.h2>

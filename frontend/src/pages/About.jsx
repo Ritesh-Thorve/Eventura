@@ -3,7 +3,7 @@ import { Heart, Award, Users, MapPin, Calendar, ArrowLeft, Clock } from 'lucide-
 
 export function About({ onBack }) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white ">
       {/* Hero Section */}
       <div className="relative h-[50vh] bg-indigo-900">
         <img 
@@ -11,16 +11,10 @@ export function About({ onBack }) {
           alt="Elegant event venue" 
           className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-indigo-700/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-indigo-700/70"> </div>
         
         <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-          <button 
-            onClick={onBack}
-            className="absolute top-8 left-4 sm:left-6 lg:left-8 flex items-center gap-2 text-white hover:text-indigo-200 transition-colors"
-          >
-            <ArrowLeft size={20} />
-            <span>Back to Venues</span>
-          </button>
+          
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">About Eventura</h1>
           <p className="text-xl text-indigo-100 max-w-2xl">
@@ -107,7 +101,8 @@ export function About({ onBack }) {
             
             <div className="bg-white text-gray-900 rounded-xl p-8">
               <h3 className="text-2xl font-bold mb-6">Send Us a Message</h3>
-              <form className="space-y-4">
+
+              <form method='submit' className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                     Your Name
@@ -116,7 +111,7 @@ export function About({ onBack }) {
                     type="text"
                     id="name"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    placeholder="John Doe"
+                    placeholder="Rohit Sharma"
                   />
                 </div>
                 

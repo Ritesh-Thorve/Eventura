@@ -2,10 +2,9 @@ const Booking = require('../models/Booking');
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
-    try { 
+    try {
         const { name, email, phone, location, eventType, eventDate, venueName } = req.body;
-
-        if (!email || !eventDate) { 
+        if (!email || !eventDate) {
             return res.status(400).json({ message: "Email and event date are required" });
         }
 
@@ -14,7 +13,7 @@ exports.createBooking = async (req, res) => {
         await newBooking.save();
         res.status(201).json({ message: "Booking successful" });
 
-    } catch (error) { 
+    } catch (error) {
         res.status(500).json({ message: "Internal Server Error", error });
     }
 };
@@ -29,9 +28,9 @@ exports.getAllBookings = async (req, res) => {
 
         const userEmail = req.user.email;
         const bookings = await Booking.find({ email: userEmail });
-
         res.json(bookings);
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Error fetching bookings:", error);
         res.status(500).json({ message: "Error fetching bookings" });
     }

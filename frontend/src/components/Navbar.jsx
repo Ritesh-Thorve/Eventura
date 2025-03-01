@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Menu, X, Calendar, LogOut, User, Shield } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useAdminAuth } from '../contexts/AdminAuthContext';
@@ -7,11 +7,11 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, login, logout } = useAuth();
-  const { admin, adminLogin, adminLogout } = useAdminAuth();
+  const { user, login: userLogin, logout: userLogout } = useAuth();
+  const { admin, login: adminLogin, logout: adminLogout } = useAdminAuth();
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-lg z-50">
@@ -26,13 +26,15 @@ export default function Navbar() {
           {/* Desktop Menu */}
           <div className="hidden sm:flex sm:items-center">
             <Link to="/" className="px-3 py-2 hover:text-indigo-300">Home</Link>
-            <Link to="/venues" className="px-3 py-2 hover:text-indigo-300">Venues</Link>
-            <Link to="/about" className="px-3 py-2 hover:text-indigo-300">About</Link>
+            <Link to="/venues" className="px-3 py-2 hover:text-indigo-300">Venues</Link> {/* Always accessible */}
             {admin && <Link to="/admin" className="px-3 py-2 hover:text-indigo-300">Admin</Link>}
             {user && !admin && <Link to="/mybookings" className="px-3 py-2 hover:text-indigo-300">My Bookings</Link>}
             {user || admin ? (
               <button
-                onClick={admin ? adminLogout : logout}
+                onClick={() => {
+                  if (admin) adminLogout();
+                  else userLogout();
+                }}
                 className="ml-4 flex items-center px-4 py-2 bg-pink-500 font-semibold rounded-md hover:bg-red-600 transition-colors"
               >
                 <LogOut className="h-4 w-4 mr-2" /> Logout
@@ -58,13 +60,15 @@ export default function Navbar() {
       {isOpen && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="sm:hidden bg-gray-800 p-4">
           <Link to="/" className="block py-2 hover:text-indigo-300" onClick={() => setIsOpen(false)}>Home</Link>
-          <Link to="/venues" className="block py-2 hover:text-indigo-300" onClick={() => setIsOpen(false)}>Venues</Link>
+          <Link to="/venues" className="block py-2 hover:text-indigo-300" onClick={() => setIsOpen(false)}>Venues</Link> {/* Always accessible */}
+          <Link to="/about" className="block py-2 hover:text-indigo-300" onClick={() => setIsOpen(false)}>About</Link>
           {admin && <Link to="/admin" className="block py-2 hover:text-indigo-300">Admin</Link>}
           {user && !admin && <Link to="/mybookings" className="block py-2 hover:text-indigo-300">My Bookings</Link>}
           {user || admin ? (
             <button
               onClick={() => {
-                admin ? adminLogout() : logout();
+                if (admin) adminLogout();
+                else userLogout();
                 setIsOpen(false);
               }}
               className="mt-4 w-full bg-pink-500 py-2 rounded-md hover:bg-red-600"

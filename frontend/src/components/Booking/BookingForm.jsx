@@ -26,7 +26,7 @@ export function BookingForm({ venue, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const bookingData = { ...formData, venueName: venue.name };
+    const bookingData = { ...formData, venueName: venue.name, venueLocation: venue.location };
 
     try {
       const response = await axios.post('http://localhost:8000/api/bookings/addbookings', bookingData);

@@ -14,21 +14,8 @@ function Venues() {
   useEffect(() => {
     const fetchVenues = async () => {
       setLoading(true);
-      const token = localStorage.getItem('token'); // Get token from localStorage
-
-      if (!token) {
-        setError('You must be logged in to view venues.');
-        toast.error('You must be logged in to view venues.');
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await axios.get('http://localhost:8000/api/venues', {
-          headers: {
-            Authorization: `Bearer ${token}`, // Attach token in headers
-          },
-        });
+        const response = await axios.get('http://localhost:8000/api/venues'); // ✅ No authentication needed
         setVenues(response.data);
       } catch (err) {
         setError('Failed to load venues');
@@ -57,7 +44,7 @@ function Venues() {
           {venues.map((venue) => (
             <VenueCard
               key={venue._id}
-              id={venue._id} // Use _id from MongoDB
+              id={venue._id}
               name={venue.name}
               imageUrl={venue.imageUrl}
               capacity={venue.capacity}
