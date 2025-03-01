@@ -20,7 +20,7 @@ export default function Sidebar() {
       {/* Welcome Message (Always visible) */}
       {user || admin ? (
         <span className="mr-3 text-white font-semibold text-sm sm:text-base">
-          {admin ? `Welcome, Admin ${admin.name} 👋` : `Welcome, ${user.name} 👋`}
+          {admin ? `Welcome, Admin 👋` : `Welcome, ${user.name} 👋`}
         </span>
       ) : null}
 

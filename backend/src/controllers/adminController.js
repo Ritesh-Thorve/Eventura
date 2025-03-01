@@ -40,19 +40,18 @@ const loginAdmin = async (req, res) => {
 
 // ✅ Fetch all user bookings (updated) 
 const getAllBookings = async (req, res) => {
-  try { 
+  try {
     const bookings = await Booking.find();
 
     if (!bookings.length) {
       return res.status(404).json({ message: "No bookings found" });
     }
- 
+
     res.status(200).json(bookings);
-  } catch (error) { 
+  } catch (error) {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
-
 
 
 
@@ -69,4 +68,24 @@ const addVenue = async (req, res) => {
   }
 };
 
-module.exports = { registerAdmin, loginAdmin, getAllBookings, addVenue };
+const updateBookingStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    booking.status = status;
+    await booking.save();
+
+    res.json({ message: `Booking updated to ${status}` });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating booking status', error });
+  }
+};
+
+
+module.exports = { registerAdmin, loginAdmin, getAllBookings, addVenue, updateBookingStatus };

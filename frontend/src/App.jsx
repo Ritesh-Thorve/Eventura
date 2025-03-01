@@ -8,10 +8,10 @@ import Home from './pages/Home';
 import MyBookings from './pages/MyBookings';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
 import Venues from './pages/Venues';
 import AdminDashboard from './pages/AdminDashboard';
-import AdminRoute from './components/AdminRoute';
+import AdminRoute from './components/Auth/AdminRoute';
 import AdminLogin from './pages/AdminLogin';
 import About from './pages/About';
 

@@ -29,9 +29,8 @@ exports.getAllBookings = async (req, res) => {
         const userEmail = req.user.email;
         const bookings = await Booking.find({ email: userEmail });
         res.json(bookings);
-    } 
-    catch (error) {
-        console.error("Error fetching bookings:", error);
+    }
+    catch (error) { 
         res.status(500).json({ message: "Error fetching bookings" });
     }
 };
@@ -53,8 +52,9 @@ exports.deleteBooking = async (req, res) => {
         await booking.deleteOne();
         res.status(200).json({ message: 'Booking deleted successfully' });
 
-    } catch (error) {
-        console.error("Error deleting booking:", error);
+    } catch (error) { 
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
