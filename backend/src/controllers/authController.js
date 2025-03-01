@@ -11,7 +11,7 @@ exports.registerUser = async (req, res) => {
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: 'User already exists ' });
 
-    const user = await User.create({ name, email, password  });
+    const user = await User.create({ name, email, password });
     res.status(201).json({ _id: user.id, name, email, token: generateToken(user.id) });
   } catch (error) {
     res.status(500).json({ message: 'Registration failed' });
@@ -34,7 +34,12 @@ exports.loginUser = async (req, res) => {
 
 // Get Profile
 exports.getProfile = async (req, res) => {
-  const user = await User.findById(req.user.id);
-  if (!user) return res.status(404).json({ message: 'User not found' });
-  res.json({ _id: user.id, name: user.name, email: user.email });
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 };

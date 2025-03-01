@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { X } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext'; // Import Auth Context
 
 const eventTypes = [
   'Wedding',
@@ -14,6 +15,7 @@ const eventTypes = [
 ];
 
 export function BookingForm({ venue, onClose }) {
+  const { user } = useAuth(); // Get logged-in user data
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,6 +24,13 @@ export function BookingForm({ venue, onClose }) {
     eventType: eventTypes[0],
     eventDate: '',
   });
+
+  // Automatically set logged-in user's email when component mounts
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({ ...prev, email: user.email, name: user.name }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,10 +86,9 @@ export function BookingForm({ venue, onClose }) {
                 type="email"
                 id="email"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-100"
                 value={formData.email}
-                placeholder="Enter login email"
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                readOnly
               />
             </div>
 

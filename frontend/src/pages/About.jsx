@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heart, Award, Users, MapPin, Calendar, ArrowLeft, Clock } from 'lucide-react'; 
 
-export function About({ onBack }) {
+export default function About({ onBack }) {
   return (
     <div className="min-h-screen bg-white ">
       {/* Hero Section */}
