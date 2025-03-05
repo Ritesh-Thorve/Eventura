@@ -56,7 +56,7 @@ export default function Footer() {
 
                 <div className="flex items-center gap-3">
                 <AboutIcon/>
-                <Link to="/about" className="block py-2 text-gray-400 hover:text-white">About</Link>
+                <Link to="/about" className="block  text-gray-400 hover:text-white">About</Link>
                 </div>
             </div>
           </div>
