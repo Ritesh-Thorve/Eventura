@@ -4,6 +4,7 @@ const adminAuth = require('../middleware/adminMiddleware');
 const { registerAdmin, loginAdmin, getAllBookings, updateBookingStatus, setAppointmentDate, totalBookings, totalVenues, newMessage } = require('../controllers/adminController'); 
 const { addVenue, updateVenue, deleteVenue, getVenues } = require('../controllers/venueController'); 
 const Booking = require('../models/Booking');
+const Message = require('../models/Message');
 
 router.post('/register', registerAdmin);
 router.post('/login', loginAdmin);
@@ -17,6 +18,16 @@ router.get('/total-bookings', adminAuth, totalBookings )
 router.get('/total-venues', adminAuth, totalVenues )
 router.get('/new-messages', adminAuth, newMessage )
 
+router.get("/allmessages", async (req, res) => {
+  try {
+    // Fetch all messages from the database
+    const messages = await Message.find().sort({ createdAt: -1 }); // Sort by latest first
+    res.status(200).json(messages); // Return the messages
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ message: "Failed to fetch messages", error: error.message });
+  }
+});
 
 router.put("/bookings/:id/assign-date", adminAuth, async (req, res) => {
     try {
