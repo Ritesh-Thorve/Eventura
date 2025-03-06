@@ -41,7 +41,7 @@ export function BookingForm({ venue, onClose }) {
       const response = await axios.post('http://localhost:8000/api/bookings/addbookings', bookingData);
 
       if (response.status === 201) {
-        toast.success('Appointment booked successfully! We will contact you shortly.', {
+        toast.success('Appliction for appointement is successfully submited! We will contact you shortly.', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,

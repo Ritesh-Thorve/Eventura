@@ -1,9 +1,10 @@
 const Admin = require('../models/Admin');
-const Booking = require('../models/Booking');
-const Venue = require('../models/Venue');
-const User = require("../models/User");
+const Booking = require('../models/Booking'); 
+const Venue = require("../models/Venue");
+const Message = require("../models/Message");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 
 const registerAdmin = async (req, res) => {
   try {
@@ -38,7 +39,7 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-// ✅ Fetch all user bookings (updated) 
+//  Fetch all user bookings (updated) 
 const getAllBookings = async (req, res) => {
   try {
     const bookings = await Booking.find();
@@ -52,10 +53,6 @@ const getAllBookings = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
-
-
-
-  
 
 const updateBookingStatus = async (req, res) => {
   try {
@@ -76,5 +73,60 @@ const updateBookingStatus = async (req, res) => {
   }
 };
 
+// ✅ Function to set appointment date
+const setAppointmentDate = async (req, res) => {
+  try {
+    const { id } = req.params; // Booking ID
+    const { appointmentDate } = req.body; // New date
 
-module.exports = { registerAdmin, loginAdmin, getAllBookings, updateBookingStatus };
+    if (!appointmentDate) {
+      return res.status(400).json({ message: "Appointment date is required" });
+    }
+
+    const booking = await Booking.findByIdAndUpdate(
+      id,
+      { appointmentDate },
+      { new: true }
+    );
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json({ message: "Appointment date set successfully", booking });
+  } catch (error) {
+    res.status(500).json({ message: "Error setting appointment date", error });
+  }
+};
+
+//  total bookings counting
+const totalBookings = async (req, res) => {
+  try {
+    const totalBookings = await Booking.countDocuments();
+    res.json({ totalBookings });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch total bookings" });
+  }
+};
+
+//total venue counting
+const totalVenues = async (req, res) => {
+  try {
+    const totalVenues = await Venue.countDocuments();
+    res.json({ totalVenues });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch total venues" });
+  }
+};
+
+//new message
+const newMessage = async (req, res) => {
+  try {
+    const newMessages = await Message.countDocuments({ isRead: false });
+    res.json({ newMessages });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch new messages" });
+  }
+};
+
+module.exports = { registerAdmin, loginAdmin, getAllBookings, updateBookingStatus, setAppointmentDate, totalBookings, totalVenues, newMessage };

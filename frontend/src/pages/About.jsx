@@ -1,24 +1,71 @@
-import React from 'react';
-import { Heart, Award, Users, MapPin, Calendar, ArrowLeft, Clock } from 'lucide-react'; 
+import React, { useState } from "react";
+import { Heart, Award, Users, MapPin, Clock, ArrowLeft } from "lucide-react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function About({ onBack }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/messages/new-message", formData);
+      if (response.status === 201) {
+        toast.success("Message sent successfully!");
+        setFormData({ name: "", email: "", message: "" }); // Clear the form
+      }
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white ">
+    <div className="min-h-screen bg-white">
+      {/* Toast Container */}
+      <ToastContainer />
+
       {/* Hero Section */}
       <div className="relative h-[50vh] bg-indigo-900">
-        <img 
-          src="https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80" 
-          alt="Elegant event venue" 
+        <img
+          src="https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80"
+          alt="Elegant event venue"
           className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-indigo-700/70"> </div>
-        
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-indigo-700/70"></div>
+
         <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-          
-          
+          {/* Back Button */}
+          <button
+            onClick={onBack}
+            className="absolute top-6 left-6 flex items-center text-white hover:text-indigo-200 transition-colors"
+          >
+            <ArrowLeft size={24} className="mr-2" />
+            Back
+          </button>
+
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">About Eventura</h1>
           <p className="text-xl text-indigo-100 max-w-2xl">
-            Connecting people with extraordinary venues for unforgettable events since  2025.
+            Connecting people with extraordinary venues for unforgettable events since 2025.
           </p>
         </div>
       </div>
@@ -29,8 +76,8 @@ export default function About({ onBack }) {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              At Eventura, we believe that finding the perfect venue should be as memorable as the event itself. 
-              Our mission is to simplify the venue discovery and booking process, connecting people with 
+              At Eventura, we believe that finding the perfect venue should be as memorable as the event itself.
+              Our mission is to simplify the venue discovery and booking process, connecting people with
               extraordinary spaces that bring their vision to life.
             </p>
           </div>
@@ -76,33 +123,39 @@ export default function About({ onBack }) {
             <div>
               <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
               <p className="text-indigo-200 mb-8">
-                Have questions about Eventura or need help finding the perfect venue? 
+                Have questions about Eventura or need help finding the perfect venue?
                 Our team is here to assist you every step of the way.
               </p>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <MapPin className="text-indigo-300 mt-1" />
                   <div>
                     <h3 className="font-semibold">Our Headquarters</h3>
-                    <p className="text-indigo-200">123 Venue Street, <br />Jalgaon, Maharashtra, India</p>
+                    <p className="text-indigo-200">
+                      123 Venue Street, <br />
+                      Jalgaon, Maharashtra, India
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
-                <Clock />
+                  <Clock className="text-indigo-300 mt-1" />
                   <div>
                     <h3 className="font-semibold">Business Hours</h3>
-                    <p className="text-indigo-200">Monday - Friday: 9AM - 6PM<br />Saturday: 10AM - 4PM</p>
+                    <p className="text-indigo-200">
+                      Monday - Friday: 9AM - 6PM <br />
+                      Saturday: 10AM - 4PM
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-white text-gray-900 rounded-xl p-8">
               <h3 className="text-2xl font-bold mb-6">Send Us a Message</h3>
 
-              <form method='submit' className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                     Your Name
@@ -110,11 +163,14 @@ export default function About({ onBack }) {
                   <input
                     type="text"
                     id="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="Rohit Sharma"
+                    required
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     Email Address
@@ -122,11 +178,14 @@ export default function About({ onBack }) {
                   <input
                     type="email"
                     id="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="you@example.com"
+                    required
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                     Message
@@ -134,16 +193,20 @@ export default function About({ onBack }) {
                   <textarea
                     id="message"
                     rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="How can we help you?"
+                    required
                   ></textarea>
                 </div>
-                
+
                 <button
                   type="submit"
+                  disabled={loading}
                   className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors"
                 >
-                  Send Message
+                  {loading ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>

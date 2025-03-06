@@ -62,17 +62,24 @@ function MyBookings() {
           bookings.map((booking) => (
             <div key={booking._id} className="bg-white shadow-lg rounded-2xl p-6 mb-6 border border-gray-200">
               <h2 className="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                <MapPin  className="text-blue-600" size={30}/> {booking.venueName}
+                <MapPin className="text-blue-600" size={30} /> {booking.venueName}
               </h2>
 
               <p className="text-lg flex items-center gap-2">
-                <Calendar className="text-green-500 " /> {new Date(booking.eventDate).toLocaleDateString()}
+                <Calendar className="text-green-500 " /><p className="font-medium">Event Date:</p> {new Date(booking.eventDate).toLocaleDateString()}
               </p>
               <p className="text-lg flex items-center gap-2">
-                <Clock className="text-yellow-500" /> {booking.eventType}
+                <Clock className="text-yellow-500" /><p className="font-medium">Event Type: </p>{booking.eventType}
               </p>
+              {/*for appointement date */}
               <p className="text-lg flex items-center gap-2">
-                <Info className="text-purple-500" /> Status: <strong>{booking.status}</strong>
+                <Calendar className="text-blue-500" />
+                <p className="font-medium">Appointment Date: </p>
+                {booking.appointmentDate ? new Date(booking.appointmentDate).toLocaleDateString() : "Not Set"}
+              </p>
+              
+              <p className="text-lg flex items-center gap-2">
+                <Info className="text-purple-500" /><p className="font-medium">Status: </p><strong>{booking.status}</strong>
               </p>
 
               <button
