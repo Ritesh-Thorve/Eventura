@@ -78,7 +78,7 @@ export default function BookingsManagement() {
   };
 
   return (
-    <div className="flex flex-col p-24 gap-6">
+    <div className="flex flex-col p-14 gap-6">
       <ToastContainer />
       
       {/* Filters Section */}

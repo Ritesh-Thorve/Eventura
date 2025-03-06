@@ -55,18 +55,7 @@ const getAllBookings = async (req, res) => {
 
 
 
-// ✅ Admin adds a new venue
-const addVenue = async (req, res) => {
-  try {
-    const { name, location, capacity, price } = req.body;
-    const newVenue = new Venue({ name, location, capacity, price });
-    await newVenue.save();
-
-    res.status(201).json({ message: 'Venue added successfully', venue: newVenue });
-  } catch (error) {
-    res.status(500).json({ message: 'Error adding venue' });
-  }
-};
+  
 
 const updateBookingStatus = async (req, res) => {
   try {
@@ -88,4 +77,4 @@ const updateBookingStatus = async (req, res) => {
 };
 
 
-module.exports = { registerAdmin, loginAdmin, getAllBookings, addVenue, updateBookingStatus };
+module.exports = { registerAdmin, loginAdmin, getAllBookings, updateBookingStatus };
