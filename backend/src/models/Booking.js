@@ -1,21 +1,3 @@
-// const mongoose = require('mongoose');
-
-// const bookingSchema = new mongoose.Schema(
-//   {
-//     name: String,
-//     email: { type: String, required: true },
-//     phone: String,
-//     location: String,
-//     eventType: String,
-//     eventDate: { type: Date, required: true },
-//     venueName: String,
-//     status: { type: String, enum: ['Pending', 'Accepted', 'Rejected'], default: 'Pending' }, // Add status field
-//   },
-//   { timestamps: true }
-// );
-
-// module.exports = mongoose.model('Booking', bookingSchema);
-
 const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema({
@@ -24,9 +6,11 @@ const bookingSchema = new mongoose.Schema({
   email: { type: String, required: true },
   eventType: { type: String, required: true },
   eventDate: { type: Date, required: true },
+  phone: { type: String, required: true }, // Add phone field
+  name: { type: String, required: true }, // Add name field
+  location: { type: String, required: true }, // Add location field
   status: { type: String, default: "Pending" },
-  totalPrice: { type: Number, required: true },
-  appointmentDate: Date, // Added field   
+  appointmentDate: Date, // Optional field
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

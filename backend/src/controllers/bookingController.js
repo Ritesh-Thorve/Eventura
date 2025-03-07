@@ -1,60 +1,83 @@
-const Booking = require('../models/Booking');
+const Booking = require("../models/Booking");
+const Venue = require("../models/Venue");
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
-    try {
-        const { name, email, phone, location, eventType, eventDate, venueName } = req.body;
-        if (!email || !eventDate) {
-            return res.status(400).json({ message: "Email and event date are required" });
-        }
+  try {
+    const { userId, venueName, email, eventType, eventDate, phone, name, location, appointmentDate } = req.body;
 
-        const newBooking = new Booking({ name, email, phone, location, eventType, eventDate, venueName });
-
-        await newBooking.save();
-        res.status(201).json({ message: "Booking successful" });
-
-    } catch (error) {
-        res.status(500).json({ message: "Internal Server Error", error });
+    // Validate required fields
+    if (!userId || !venueName || !email || !eventType || !eventDate || !phone || !name || !location) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+    const newBooking = new Booking({
+      userId,
+      venueName,
+      email,
+      eventType,
+      eventDate,
+      phone,
+      name,
+      location,
+      appointmentDate,
+    });
+
+    await newBooking.save();
+    res.status(201).json({ message: "Booking created successfully", booking: newBooking });
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
-
-// Get bookings for the logged-in user
+// Get all bookings for the logged-in user (with venue contact info)
 exports.getAllBookings = async (req, res) => {
-    try {
-        if (!req.user || !req.user.email) {
-            return res.status(401).json({ message: "Unauthorized. Please log in." });
-        }
+  try {
+    if (!req.user || !req.user.email) {
+      return res.status(401).json({ message: "Unauthorized. Please log in." });
+    }
 
-        const userEmail = req.user.email;
-        const bookings = await Booking.find({ email: userEmail });
-        res.json(bookings);
-    }
-    catch (error) { 
-        res.status(500).json({ message: "Error fetching bookings" });
-    }
+    const userEmail = req.user.email;
+    const bookings = await Booking.find({ email: userEmail }).lean();
+
+    // Fetch venue contact info for each booking
+    const bookingsWithVenueDetails = await Promise.all(
+      bookings.map(async (booking) => {
+        const venue = await Venue.findOne({ name: booking.venueName }).lean();
+        return {
+          ...booking,
+          venueContactEmail: venue?.contact?.email || "Not Available",
+          venueContactPhone: venue?.contact?.phone || "Not Available",
+        };
+      })
+    );
+
+    res.status(200).json(bookingsWithVenueDetails);
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ message: "Error fetching bookings" });
+  }
 };
 
-// Delete booking
+// Delete a booking
 exports.deleteBooking = async (req, res) => {
-    try {
-        const booking = await Booking.findById(req.params.id);
+  try {
+    const booking = await Booking.findById(req.params.id);
 
-        if (!booking) {
-            return res.status(404).json({ message: 'Booking not found' });
-        }
-
-        // Ensure only the user who created the booking can delete it
-        if (booking.email !== req.user.email) {
-            return res.status(403).json({ message: 'Not authorized to delete this booking' });
-        }
-
-        await booking.deleteOne();
-        res.status(200).json({ message: 'Booking deleted successfully' });
-
-    } catch (error) { 
-        res.status(500).json({ message: 'Server error' });
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
     }
+
+    // Ensure only the user who created the booking can delete it
+    if (booking.email !== req.user.email) {
+      return res.status(403).json({ message: "Not authorized to delete this booking" });
+    }
+
+    await booking.deleteOne();
+    res.status(200).json({ message: "Booking deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
-
-
