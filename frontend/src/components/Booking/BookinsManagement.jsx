@@ -34,7 +34,7 @@ export default function BookingsManagement() {
       setBookings(response.data);
     } catch (err) {
       setError("Failed to fetch bookings");
-      toast.error("Failed to fetch bookings");
+      toast.error("No Bookings Found");
     } finally {
       setLoading(false);
     }

@@ -1,128 +1,205 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useAuth } from "../contexts/AuthContext";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import { MapPin, Calendar, Clock, Info, Trash2, Phone, Mail } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react"
+import axios from "axios"
+import { useAuth } from "../contexts/AuthContext"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { useNavigate } from "react-router-dom"
+import { MapPin, Calendar, Clock, Info, Trash2, Phone, Mail, Loader2, ArrowRight, CalendarCheck } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Badge } from "../components/ui/Badge"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 
 function MyBookings() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedBooking, setSelectedBooking] = useState(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [bookings, setBookings] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [selectedBooking, setSelectedBooking] = useState(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
-    if (user) fetchBookings();
-  }, [user]);
+    if (user) fetchBookings()
+  }, [user])
 
   const fetchBookings = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       const response = await axios.get("http://localhost:8000/api/bookings/mybookings", {
         headers: { Authorization: `Bearer ${token}` },
-      });
+      })
 
       if (response.data.length === 0) {
-        toast.error("🚨 No bookings found. Book a venue now!", { autoClose: 3000 });
+        console.log("No bookings found. Book a venue now!", {
+          icon: "🎪",
+          position: "top-center",
+          autoClose: 3000,
+        })
       }
 
-      setBookings(response.data);
+      setBookings(response.data)
     } catch (error) {
-      toast.error("❌ Failed to fetch bookings");
+      toast.error("Failed to fetch bookings", {
+        icon: "❌",
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleDeleteClick = (booking) => {
-    setSelectedBooking(booking);
-    setIsDialogOpen(true);
-  };
+    setSelectedBooking(booking)
+    setIsDialogOpen(true)
+  }
 
   const confirmDelete = async () => {
-    if (!selectedBooking) return;
+    if (!selectedBooking) return
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       await axios.delete(`http://localhost:8000/api/bookings/${selectedBooking._id}`, {
         headers: { Authorization: `Bearer ${token}` },
-      });
+      })
 
-      toast.success("Booking deleted successfully");
-      fetchBookings();
+      toast.success("Booking deleted successfully", {
+        icon: "✅",
+      })
+      fetchBookings()
     } catch (error) {
-      toast.error("Failed to delete booking");
+      toast.error("Failed to delete booking")
     } finally {
-      setIsDialogOpen(false);
-      setSelectedBooking(null);
+      setIsDialogOpen(false)
+      setSelectedBooking(null)
     }
-  };
+  }
+
+  const getStatusBadge = (status) => {
+    switch (status.toLowerCase()) {
+      case "confirmed":
+        return <Badge className="bg-green-500 hover:bg-green-600">{status}</Badge>
+      case "pending":
+        return <Badge className="bg-yellow-500 hover:bg-yellow-600">{status}</Badge>
+      case "cancelled":
+        return <Badge className="bg-red-500 hover:bg-red-600">{status}</Badge>
+      default:
+        return <Badge variant="outline">{status}</Badge>
+    }
+  }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Not Set"
+    const date = new Date(dateString)
+    return date.toLocaleDateString("en-US", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-24 px-6 flex flex-col items-center">
-      <h1 className="text-5xl font-bold text-gray-900 text-center mb-10">📅 My Bookings</h1>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-3 flex items-center justify-center gap-3">
+            <CalendarCheck className="text-primary h-10 w-10 mt-1" />
+            My Bookings
+          </h1>
+          <p className="text-slate-500 max-w-2xl mx-auto">Manage all your venue bookings in one place</p>
+        </div>
 
-      {loading ? <p className="text-center text-lg text-gray-700">Loading...</p> : null}
-
-      <div className="max-w-6xl w-full">
-        {bookings.length > 0 ? (
-          bookings.map((booking) => (
-            <div
-              key={booking._id}
-              className="bg-white shadow-lg rounded-2xl p-6 mb-6 border border-gray-200 
-                         hover:scale-105 hover:shadow-xl transition-transform duration-300 ease-in-out"
-            >
-              <h2 className="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                <MapPin className="text-blue-600" size={30} /> {booking.venueName}
-              </h2>
-
-              <p className="text-lg flex items-center gap-2">
-                <Calendar className="text-green-500" />
-                <span className="font-medium">Event Date:</span> {new Date(booking.eventDate).toLocaleDateString()}
-              </p>
-              <p className="text-lg flex items-center gap-2">
-                <Clock className="text-yellow-500" />
-                <span className="font-medium">Event Type:</span> {booking.eventType}
-              </p>
-
-              <p className="text-lg flex items-center gap-2">
-                <Calendar className="text-blue-500" />
-                <span className="font-medium">Appointment Date:</span>
-                {booking.appointmentDate ? new Date(booking.appointmentDate).toLocaleDateString() : "Not Set"}
-              </p>
-
-              <p className="text-lg flex items-center gap-2">
-                <Info className="text-purple-500" />
-                <span className="font-medium">Status:</span> <strong>{booking.status}</strong>
-              </p>
-
-              <p className="text-lg flex items-center gap-2">
-                <Phone className="text-indigo-500" />
-                <span className="font-medium">Venue Contact:</span> {booking.venueContactPhone}
-              </p>
-              <p className="text-lg flex items-center gap-2">
-                <Mail className="text-red-500" />
-                <span className="font-medium">Venue Email:</span> {booking.venueContactEmail}
-              </p>
-
-              {/* Delete Button */}
-              <button
-                onClick={() => handleDeleteClick(booking)}
-                className="mt-4 bg-red-500 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 
-                           transition-all shadow-md hover:shadow-lg hover:scale-105"
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
+            <p className="text-slate-600 text-lg">Loading your bookings...</p>
+          </div>
+        ) : bookings.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {bookings.map((booking) => (
+              <Card
+                key={booking._id}
+                className="overflow-hidden border-slate-200 hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
               >
-                <Trash2 /> Delete Booking
-              </button>
-            </div>
-          ))
+                <CardHeader className="bg-gradient-to-r  from-primary/10 to-primary/5 pb-4">
+                  <CardTitle className="flex items-start gap-3 text-2xl">
+                    <MapPin className="text-primary h-6 w-6 flex-shrink-0 mt-1" />
+                    <span className="line-clamp-2 font-bold">{booking.venueName}</span>
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="pt-6 space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex items-start gap-2">
+                      <Calendar className="text-emerald-500 h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-bold text-slate-700">Event Date</p>
+                        <p className="text-slate-600">{formatDate(booking.eventDate)}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <Clock className="text-amber-500 h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-bold text-slate-700">Event Type</p>
+                        <p className="text-slate-600">{booking.eventType}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <Calendar className="text-blue-500 h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-bold text-slate-700">Appointment Date</p>
+                        <p className="text-slate-600">{formatDate(booking.appointmentDate)}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <Info className="text-purple-500 h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-bold text-slate-700">Status</p>
+                        <p className="text-slate-600 font-bold"> <span className="font-bold text-xl">{booking.status}</span></p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator className="my-2" />
+
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-bold text-slate-700">Venue Contact</h3>
+                    <div className="flex items-center gap-2">
+                      <Phone className="text-indigo-500 h-4 w-4" />
+                      <a href={`tel:${booking.venueContactPhone}`} className="text-slate-600 hover:text-indigo-500">
+                        {booking.venueContactPhone}
+                      </a>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="text-rose-500 h-4 w-4" />
+                      <a href={`mailto:${booking.venueContactEmail}`} className="text-slate-600 break-all hover:text-rose-500">
+                        {booking.venueContactEmail}
+                      </a>
+                    </div>
+                  </div>
+                </CardContent>
+
+                <CardFooter className="bg-slate-50 flex justify-end pt-4">
+                  <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(booking)} className="gap-2">
+                    <Trash2 className="h-4 w-4" />
+                    Cancel Booking
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         ) : (
-          !loading && (
-            <div className="flex flex-col items-center justify-center h-auto bg-white shadow-lg rounded-3xl p-10 border border-gray-200">
+          <div className="flex flex-col items-center justify-center h-auto bg-white shadow-lg rounded-3xl p-10 border border-gray-200">
               <img
                 src="nobookings_found.png"
                 alt="No Bookings"
@@ -139,27 +216,42 @@ function MyBookings() {
                 🎉 Book a Venue
               </button>
             </div>
-          )
         )}
       </div>
 
       {/* Delete Confirmation Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Are you sure?</DialogTitle>
-            <p className="text-gray-600">This action cannot be undone.</p>
+            <DialogTitle className="text-xl">Cancel this booking?</DialogTitle>
+            <DialogDescription>
+              {selectedBooking && (
+                <div className="mt-2 text-slate-600">
+                  <p>
+                    You're about to cancel your booking at <strong>{selectedBooking.venueName}</strong> for{" "}
+                    <strong>{formatDate(selectedBooking.eventDate)}</strong>.
+                  </p>
+                  <p className="mt-2">This action cannot be undone.</p>
+                </div>
+              )}
+            </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={confirmDelete}>Delete</Button>
+          <DialogFooter className="sm:justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              Keep Booking
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete} className="gap-2">
+              <Trash2 className="h-4 w-4" />
+              Cancel Booking
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <ToastContainer />
     </div>
-  );
+  )
 }
 
-export default MyBookings;
+export default MyBookings
+

@@ -1,8 +1,9 @@
-"use client"
-
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Edit, Plus, Search, Trash2 } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify"; // 👈 Import toast
+import "react-toastify/dist/ReactToastify.css"; // 👈 Import toast styles
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,19 +21,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 
-
-
 export default function VenuesManagement() {
-  const [venues, setVenues] = useState([]); // 👈 Ensure venues is an array
+  const [venues, setVenues] = useState([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  // Days of week array for availability selection
+  const [errors, setErrors] = useState({});
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  // Form state for adding/editing venues
   const [formData, setFormData] = useState({
     name: "",
     imageUrl: "",
@@ -48,11 +46,10 @@ export default function VenuesManagement() {
     },
     availability: {
       days: "",
-      hours: "",
+      hours: "9:00 AM - 6:00 PM",
     },
   });
 
-  // Fetch venues from the backend
   useEffect(() => {
     fetchVenues();
   }, []);
@@ -60,30 +57,20 @@ export default function VenuesManagement() {
   const fetchVenues = async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/venues");
-  
-      if (!response.data || !Array.isArray(response.data)) {
-        throw new Error("Invalid response format");
-      }
-  
       setVenues(response.data);
     } catch (error) {
       console.error("Failed to fetch venues:", error);
-      setVenues([]); // 👈 Ensure it's always an array, even on failure
+      setVenues([]);
     }
   };
-  
 
-
-  // Filter venues based on search query
-  const filteredVenues = Array.isArray(venues) && venues.length > 0
-  ? venues.filter(
-      (venue) =>
-        venue?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        venue?.location?.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  : [];
-
-
+  const filteredVenues = venues
+    .filter((venue) => venue)
+    .filter((venue) => {
+      const name = venue?.name?.toLowerCase() || "";
+      const location = venue?.location?.toLowerCase() || "";
+      return name.includes(searchQuery.toLowerCase()) || location.includes(searchQuery.toLowerCase());
+    });
 
   const resetFormData = () => {
     setFormData({
@@ -101,9 +88,10 @@ export default function VenuesManagement() {
       },
       availability: {
         days: "",
-        hours: "",
+        hours: "9:00 AM - 6:00 PM",
       },
     });
+    setErrors({});
   };
 
   const openAddDialog = () => {
@@ -122,58 +110,61 @@ export default function VenuesManagement() {
     setIsDeleteDialogOpen(true);
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = "Venue name is required";
+    if (!formData.location) newErrors.location = "Location is required";
+    if (!formData.capacity) newErrors.capacity = "Capacity is required";
+    if (!formData.price) newErrors.price = "Price is required";
+    if (!formData.contact.email) newErrors.email = "Email is required";
+    if (!formData.contact.phone) newErrors.phone = "Phone number is required";
+    if (!formData.availability.days) newErrors.days = "At least one day must be selected";
+    if (!formData.availability.hours) newErrors.hours = "Availability hours are required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleAddVenue = async () => {
-    if (!formData.availability.hours) {
-      formData.availability.hours = "9:00 AM - 6:00 PM"; // 👈 Default value if empty
-    }
-  
+    if (!validateForm()) return;
+
     try {
-      console.log("Sending venue data:", JSON.stringify(formData, null, 2));
-  
       const response = await axios.post("http://localhost:8000/api/admin/addvenue", formData);
       setVenues([...venues, response.data]);
       setIsAddDialogOpen(false);
       resetFormData();
+      toast.success("Venue added successfully!"); // 👈 Success toast
     } catch (error) {
       console.error("Failed to add venue:", error.response ? error.response.data : error.message);
+      toast.error("Failed to add venue. Please try again."); // 👈 Error toast
     }
   };
-  
-  
-  
 
   const handleEditVenue = async () => {
+    if (!validateForm()) return;
+
     try {
-      if (!selectedVenue || !selectedVenue._id) {
-        console.error("Venue ID is missing");
-        return;
-      }
-  
       const response = await axios.put(
         `http://localhost:8000/api/admin/updatevenue/${selectedVenue._id}`,
         formData
       );
-  
-      setVenues(
-        venues.map((venue) => 
-          venue._id === selectedVenue._id ? response.data.updatedVenue : venue
-        )
-      );
-  
+      setVenues(venues.map((venue) => (venue._id === selectedVenue._id ? response.data.updatedVenue : venue)));
       setIsEditDialogOpen(false);
+      toast.success("Venue updated successfully!"); // 👈 Success toast
     } catch (error) {
       console.error("Failed to update venue:", error.response ? error.response.data : error.message);
+      toast.error("Failed to update venue. Please try again."); // 👈 Error toast
     }
   };
-  
 
   const handleDeleteVenue = async () => {
     try {
       await axios.delete(`http://localhost:8000/api/admin/delete/${selectedVenue._id}`);
       setVenues(venues.filter((venue) => venue._id !== selectedVenue._id));
       setIsDeleteDialogOpen(false);
+      toast.success("Venue deleted successfully!"); // 👈 Success toast
     } catch (error) {
       console.error("Failed to delete venue:", error.response ? error.response.data : error.message);
+      toast.error("Failed to delete venue. Please try again."); // 👈 Error toast
     }
   };
 
@@ -230,6 +221,8 @@ export default function VenuesManagement() {
 
   return (
     <div className="flex flex-col gap-6 p-14">
+      <ToastContainer />  
+      
       {/* Search and Add Venue Button */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-2">
@@ -245,7 +238,7 @@ export default function VenuesManagement() {
           </div>
         </div>
         <Button onClick={openAddDialog}>
-          <Plus className="mr-2 h-4 w-4 " /> Add Venue
+          <Plus className="mr-2 h-4 w-4" /> Add Venue
         </Button>
       </div>
 
@@ -317,11 +310,25 @@ export default function VenuesManagement() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Venue Name</Label>
-                  <Input id="name" name="name" value={formData.name} onChange={handleInputChange} />
+                  <Input
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className={errors.name ? "border-red-500" : ""}
+                  />
+                  {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="location">Location</Label>
-                  <Input id="location" name="location" value={formData.location} onChange={handleInputChange} />
+                  <Input
+                    id="location"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    className={errors.location ? "border-red-500" : ""}
+                  />
+                  {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
                 </div>
               </div>
               <div className="space-y-2">
@@ -355,11 +362,21 @@ export default function VenuesManagement() {
                     type="number"
                     value={formData.capacity}
                     onChange={handleNumberChange}
+                    className={errors.capacity ? "border-red-500" : ""}
                   />
+                  {errors.capacity && <p className="text-sm text-red-500">{errors.capacity}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price ($)</Label>
-                  <Input id="price" name="price" type="number" value={formData.price} onChange={handleNumberChange} />
+                  <Label htmlFor="price">Price (₹)</Label>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="number"
+                    value={formData.price}
+                    onChange={handleNumberChange}
+                    className={errors.price ? "border-red-500" : ""}
+                  />
+                  {errors.price && <p className="text-sm text-red-500">{errors.price}</p>}
                 </div>
               </div>
               <div className="space-y-2">
@@ -398,7 +415,9 @@ export default function VenuesManagement() {
                         contact: { ...formData.contact, email: e.target.value },
                       })
                     }
+                    className={errors.email ? "border-red-500" : ""}
                   />
+                  {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
@@ -412,8 +431,26 @@ export default function VenuesManagement() {
                         contact: { ...formData.contact, phone: e.target.value },
                       })
                     }
+                    className={errors.phone ? "border-red-500" : ""}
                   />
+                  {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="availability-hours">Availability Hours</Label>
+                <Input
+                  id="availability-hours"
+                  name="availability.hours"
+                  value={formData.availability.hours}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      availability: { ...formData.availability, hours: e.target.value },
+                    })
+                  }
+                  className={errors.hours ? "border-red-500" : ""}
+                />
+                {errors.hours && <p className="text-sm text-red-500">{errors.hours}</p>}
               </div>
               <div className="space-y-2">
                 <Label>Availability (Select Days)</Label>
@@ -430,6 +467,7 @@ export default function VenuesManagement() {
                     </Button>
                   ))}
                 </div>
+                {errors.days && <p className="text-sm text-red-500">{errors.days}</p>}
               </div>
             </TabsContent>
           </Tabs>
@@ -437,7 +475,9 @@ export default function VenuesManagement() {
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleAddVenue}>Add Venue</Button>
+            <Button onClick={handleAddVenue} disabled={Object.keys(errors).length > 0}>
+              Add Venue
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -459,11 +499,25 @@ export default function VenuesManagement() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-name">Venue Name</Label>
-                  <Input id="edit-name" name="name" value={formData.name} onChange={handleInputChange} />
+                  <Input
+                    id="edit-name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className={errors.name ? "border-red-500" : ""}
+                  />
+                  {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="edit-location">Location</Label>
-                  <Input id="edit-location" name="location" value={formData.location} onChange={handleInputChange} />
+                  <Input
+                    id="edit-location"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    className={errors.location ? "border-red-500" : ""}
+                  />
+                  {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
                 </div>
               </div>
               <div className="space-y-2">
@@ -497,17 +551,21 @@ export default function VenuesManagement() {
                     type="number"
                     value={formData.capacity}
                     onChange={handleNumberChange}
+                    className={errors.capacity ? "border-red-500" : ""}
                   />
+                  {errors.capacity && <p className="text-sm text-red-500">{errors.capacity}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="edit-price">Price ($)</Label>
+                  <Label htmlFor="edit-price">Price (₹)</Label>
                   <Input
                     id="edit-price"
                     name="price"
                     type="number"
                     value={formData.price}
                     onChange={handleNumberChange}
+                    className={errors.price ? "border-red-500" : ""}
                   />
+                  {errors.price && <p className="text-sm text-red-500">{errors.price}</p>}
                 </div>
               </div>
               <div className="space-y-2">
@@ -546,7 +604,9 @@ export default function VenuesManagement() {
                         contact: { ...formData.contact, email: e.target.value },
                       })
                     }
+                    className={errors.email ? "border-red-500" : ""}
                   />
+                  {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="edit-phone">Phone Number</Label>
@@ -560,8 +620,26 @@ export default function VenuesManagement() {
                         contact: { ...formData.contact, phone: e.target.value },
                       })
                     }
+                    className={errors.phone ? "border-red-500" : ""}
                   />
+                  {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-availability-hours">Availability Hours</Label>
+                <Input
+                  id="edit-availability-hours"
+                  name="availability.hours"
+                  value={formData.availability.hours}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      availability: { ...formData.availability, hours: e.target.value },
+                    })
+                  }
+                  className={errors.hours ? "border-red-500" : ""}
+                />
+                {errors.hours && <p className="text-sm text-red-500">{errors.hours}</p>}
               </div>
               <div className="space-y-2">
                 <Label>Availability (Select Days)</Label>
@@ -578,6 +656,7 @@ export default function VenuesManagement() {
                     </Button>
                   ))}
                 </div>
+                {errors.days && <p className="text-sm text-red-500">{errors.days}</p>}
               </div>
             </TabsContent>
           </Tabs>
@@ -585,7 +664,9 @@ export default function VenuesManagement() {
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleEditVenue}>Save Changes</Button>
+            <Button onClick={handleEditVenue} disabled={Object.keys(errors).length > 0}>
+              Save Changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

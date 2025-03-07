@@ -15,7 +15,7 @@ const venueSchema = new mongoose.Schema({
   },
   availability: {
     days: { type: String, required: true },
-    hours: { type: String, required: true, default: "9:00 AM - 6:00 PM" }, 
+    hours: { type: String, required: true, default: "9:00 AM - 10:00 PM" }, 
   },
 });
 
