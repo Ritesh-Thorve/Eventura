@@ -1,49 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const adminAuth = require('../middleware/adminMiddleware');
-const { registerAdmin, loginAdmin, getAllBookings, updateBookingStatus, setAppointmentDate, totalBookings, totalVenues, newMessage } = require('../controllers/adminController'); 
-const { addVenue, updateVenue, deleteVenue, getVenues } = require('../controllers/venueController'); 
-const Booking = require('../models/Booking');
-const Message = require('../models/Message');
+const {
+  registerAdmin,
+  loginAdmin,
+  getAllBookings,
+  updateBookingStatus,
+  setAppointmentDate,
+  getStats
+} = require('../controllers/adminController'); 
+const { addVenue, updateVenue, deleteVenue, getVenues } = require('../controllers/venueController');
+const { getMessages, markAsRead, deleteMessage, sendMail } = require("../controllers/messageController");
 
 router.post('/register', registerAdmin);
 router.post('/login', loginAdmin);
 router.get('/allbookings', adminAuth, getAllBookings);
-router.get('/venue', adminAuth, getVenues)
+router.get('/venues', adminAuth, getVenues);
 router.post('/addvenue', adminAuth, addVenue);
-router.put("/updatevenue/:id",adminAuth, updateVenue);
-router.delete("/delete/:id", adminAuth, deleteVenue); 
-router.put('/bookings/:id/status', adminAuth, updateBookingStatus); 
-router.get('/total-bookings', adminAuth, totalBookings )
-router.get('/total-venues', adminAuth, totalVenues )
-router.get('/new-messages', adminAuth, newMessage )
+router.put('/updatevenue/:id', adminAuth, updateVenue);
+router.delete('/delete/:id', adminAuth, deleteVenue);
+router.put('/bookings/:id/status', adminAuth, updateBookingStatus);
+router.put('/bookings/:id/assign-date', adminAuth, setAppointmentDate);
+router.get('/getstats', adminAuth, getStats); 
 
-router.get("/allmessages", async (req, res) => {
-  try {
-    // Fetch all messages from the database
-    const messages = await Message.find().sort({ createdAt: -1 }); // Sort by latest first
-    res.status(200).json(messages); // Return the messages
-  } catch (error) {
-    console.error("Error fetching messages:", error);
-    res.status(500).json({ message: "Failed to fetch messages", error: error.message });
-  }
-});
-
-router.put("/bookings/:id/assign-date", adminAuth, async (req, res) => {
-    try {
-      const { appointmentDate } = req.body;
-      const booking = await Booking.findByIdAndUpdate(
-        req.params.id,
-        { appointmentDate },
-        { new: true }
-      );
-      if (!booking) return res.status(404).json({ message: "Booking not found" });
-      res.json({ message: "Appointment date assigned", booking });
-    } catch (error) {
-      res.status(500).json({ message: "Server error", error });
-    }
-  });
-  
-
+router.get("/messages", adminAuth, getMessages);
+router.put("/messages/:id/read", adminAuth, markAsRead);
+router.delete("/messages/:id", adminAuth, deleteMessage);
+router.post("/send-mail", adminAuth, sendMail);
 
 module.exports = router;
