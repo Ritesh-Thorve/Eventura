@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Loader2, UserRound, LockKeyhole } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -9,20 +11,25 @@ export default function Login() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     setLoading(true);
 
     try {
       await login(email, password);
-      navigate('/');
-      window.location.reload();
+      toast.success("Login successful!", {
+        position: "top-right",
+        autoClose: 3000,
+      }); 
+        navigate('/');
+        window.location.reload(); 
     } catch (err) {
-      setError('Invalid email or password');
+      toast.error("Invalid email or password", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } finally {
       setLoading(false);
     }
@@ -36,7 +43,6 @@ export default function Login() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-
         {/* Image Section */}
         <div className="hidden md:block w-1/2">
           <img src="/Loginimg.jpg" alt="Login Illustration" className="w-full object-cover" />
@@ -53,15 +59,11 @@ export default function Login() {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-            
             {/* Email Input */}
             <div className="relative">
               <UserRound className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
               <input
-                id="email"
-                name="email"
                 type="email"
-                autoComplete="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -74,10 +76,7 @@ export default function Login() {
             <div className="relative">
               <LockKeyhole className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
               <input
-                id="password"
-                name="password"
                 type="password"
-                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -85,17 +84,6 @@ export default function Login() {
                 placeholder="Password"
               />
             </div>
-
-            {/* Error Message */}
-            {error && (
-              <motion.div
-                className="bg-red-50 border border-red-200 text-red-700 rounded-md p-3"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                {error}
-              </motion.div>
-            )}
 
             {/* Submit Button */}
             <button
@@ -108,6 +96,9 @@ export default function Login() {
           </form>
         </div>
       </motion.div>
+
+      {/* Toast container */}
+      <ToastContainer />
     </div>
   );
 }

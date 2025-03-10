@@ -12,7 +12,8 @@ import ProtectedRoute from './components/Auth/ProtectedRoute';
 import Venues from './pages/Venues';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/Auth/AdminRoute';
-import AdminLogin from './pages/AdminLogin';
+import AdminLogin from './pages/AdminLogin'
+import NotFound from './pages/NotFound';
 import About from './pages/About';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
                 <Route path="/mybookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
             <Footer />

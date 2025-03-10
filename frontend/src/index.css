@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* Prevent horizontal scroll on entire page */
+html, body {
+  overflow-x: hidden;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
