@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { Loader2, UserRound, LockKeyhole } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -13,23 +12,19 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       await login(email, password);
-      toast.success("Login successful!", {
-        position: "top-right",
-        autoClose: 3000,
-      }); 
-        navigate('/');
-        window.location.reload(); 
+      toast.success("Login successful!" );
+      navigate('/'); 
+      window.location.reload();
     } catch (err) {
-      toast.error("Invalid email or password", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -96,9 +91,6 @@ export default function Login() {
           </form>
         </div>
       </motion.div>
-
-      {/* Toast container */}
-      <ToastContainer />
     </div>
   );
 }

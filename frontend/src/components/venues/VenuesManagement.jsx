@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Edit, Plus, Search, Trash2 } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify"; // 👈 Import toast
-import "react-toastify/dist/ReactToastify.css"; // 👈 Import toast styles
+import { toast } from "react-toastify"; 
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -132,10 +131,10 @@ export default function VenuesManagement() {
       setVenues([...venues, response.data]);
       setIsAddDialogOpen(false);
       resetFormData();
-      toast.success("Venue added successfully!"); // 👈 Success toast
+      toast.success("Venue added successfully!"); 
     } catch (error) {
       console.error("Failed to add venue:", error.response ? error.response.data : error.message);
-      toast.error("Failed to add venue. Please try again."); // 👈 Error toast
+      toast.error("Failed to add venue. Please try again.");  
     }
   };
 
@@ -149,10 +148,10 @@ export default function VenuesManagement() {
       );
       setVenues(venues.map((venue) => (venue._id === selectedVenue._id ? response.data.updatedVenue : venue)));
       setIsEditDialogOpen(false);
-      toast.success("Venue updated successfully!"); // 👈 Success toast
+      toast.success("Venue updated successfully!"); 
     } catch (error) {
       console.error("Failed to update venue:", error.response ? error.response.data : error.message);
-      toast.error("Failed to update venue. Please try again."); // 👈 Error toast
+      toast.error("Failed to update venue. Please try again."); 
     }
   };
 
@@ -161,10 +160,10 @@ export default function VenuesManagement() {
       await axios.delete(`http://localhost:8000/api/admin/delete/${selectedVenue._id}`);
       setVenues(venues.filter((venue) => venue._id !== selectedVenue._id));
       setIsDeleteDialogOpen(false);
-      toast.success("Venue deleted successfully!"); // 👈 Success toast
+      toast.success("Venue deleted successfully!"); 
     } catch (error) {
       console.error("Failed to delete venue:", error.response ? error.response.data : error.message);
-      toast.error("Failed to delete venue. Please try again."); // 👈 Error toast
+      toast.error("Failed to delete venue. Please try again."); 
     }
   };
 
@@ -221,7 +220,7 @@ export default function VenuesManagement() {
 
   return (
     <div className="flex flex-col gap-6 p-14">
-      <ToastContainer />  
+     
       
       {/* Search and Add Venue Button */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -237,21 +236,21 @@ export default function VenuesManagement() {
             />
           </div>
         </div>
-        <Button onClick={openAddDialog}>
-          <Plus className="mr-2 h-4 w-4" /> Add Venue
+        <Button className="bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out disabled:bg-indigo-400" onClick={openAddDialog}>
+          <Plus className="mr-2 h-7 w-7" /> Add Venue
         </Button>
       </div>
 
       {/* Venues Table */}
-      <Card>
+      <Card className="overflow-x-auto mt-5">  
         <CardHeader>
-          <CardTitle>Venues Management</CardTitle>
-          <CardDescription>Manage, edit, and add new venues</CardDescription>
+          <CardTitle className="text-xl font-bold">Venues Management</CardTitle>
+          <CardDescription className="text-sm mt-2">Manage, edit, and add new venues</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="text-lg">
                 <TableHead>Venue</TableHead>
                 <TableHead className="hidden md:table-cell">Location</TableHead>
                 <TableHead className="hidden md:table-cell">Capacity</TableHead>
@@ -664,7 +663,7 @@ export default function VenuesManagement() {
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleEditVenue} disabled={Object.keys(errors).length > 0}>
+            <Button  className="bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out disabled:bg-indigo-400" onClick={handleEditVenue} disabled={Object.keys(errors).length > 0}>
               Save Changes
             </Button>
           </DialogFooter>

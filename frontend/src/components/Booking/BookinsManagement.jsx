@@ -9,8 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify"; 
 
 export default function BookingsManagement() {
   const [bookings, setBookings] = useState([]);
@@ -82,10 +81,10 @@ export default function BookingsManagement() {
 
   return (
     <div className="flex flex-col p-14 gap-6">
-      <ToastContainer />
 
       {/* Filters Section */}
       <div className="flex justify-between items-center mb-4">
+
         {/* Search Input */}
         <div className="relative w-1/3">
           <Search className="absolute left-2 top-2 h-4 w-4 text-muted-foreground" />
@@ -119,7 +118,7 @@ export default function BookingsManagement() {
       {/* Bookings Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Venue Bookings</CardTitle>
+          <CardTitle className="text-xl font-bold ">Venue Bookings</CardTitle>
           <CardDescription>Manage all venue bookings from users</CardDescription>
         </CardHeader>
         <CardContent>
@@ -130,7 +129,7 @@ export default function BookingsManagement() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="text-base font-semibold">
                   <TableHead>Venue</TableHead>
                   <TableHead>User</TableHead>
                   <TableHead>Event Type</TableHead>
@@ -141,6 +140,7 @@ export default function BookingsManagement() {
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody>
                 {filteredBookings.map((booking) => (
                   <TableRow key={booking._id}>
@@ -153,6 +153,7 @@ export default function BookingsManagement() {
                         ? new Date(booking.appointmentDate).toLocaleDateString()
                         : "Not assigned"}
                     </TableCell>
+
                     <TableCell>
                       <Input
                         type="date"
@@ -164,21 +165,23 @@ export default function BookingsManagement() {
                         }}
                       />
                     </TableCell>
+
                     <TableCell>
                       <Badge>{booking.status}</Badge>
                     </TableCell>
+
                     <TableCell className="flex gap-2">
                       {/* Detail Button */}
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button size="sm" variant="outline" onClick={() => setSelectedBooking(booking)}>
+                          <Button size="sm" variant="outline" onClick={() => setSelectedBooking(booking)} className="text-md">
                             Details
                           </Button>
                         </DialogTrigger>
                         {selectedBooking && (
                           <DialogContent onClose={() => setSelectedBooking(null)}>
                             <DialogHeader>
-                              <DialogTitle>Booking Details</DialogTitle>
+                              <DialogTitle className="text-xl">Booking Details</DialogTitle>
                             </DialogHeader>
                             <div className="p-4">
                               <p><strong>Venue:</strong> {selectedBooking.venueName}</p>
@@ -187,7 +190,7 @@ export default function BookingsManagement() {
                               <p><strong>Event Date:</strong> {new Date(selectedBooking.eventDate).toLocaleDateString()}</p>
                               <p><strong>Appointment Date:</strong> {selectedBooking.appointmentDate ? new Date(selectedBooking.appointmentDate).toLocaleDateString() : "Not assigned"}</p>
                               <p><strong>Status:</strong> {selectedBooking.status}</p>
-                              <p><strong>Mobile Number:</strong> {selectedBooking.mobileNumber}</p>
+                              <p><strong>Mobile Number:</strong> {selectedBooking.phone}</p>
                             </div>
                           </DialogContent>
                         )}
@@ -196,13 +199,13 @@ export default function BookingsManagement() {
                       {/* Status Update Dropdown */}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">Actions</Button>
+                          <Button variant="outline" size="sm" className="text-md">Actions</Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => updateBookingStatus(booking._id, "Accepted")}>
+                          <DropdownMenuItem  className="text-md" onClick={() => updateBookingStatus(booking._id, "Accepted")}>
                             Accept Booking
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateBookingStatus(booking._id, "Rejected")}>
+                          <DropdownMenuItem className="text-md" onClick={() => updateBookingStatus(booking._id, "Rejected")}>
                             Reject Booking
                           </DropdownMenuItem>
                         </DropdownMenuContent>

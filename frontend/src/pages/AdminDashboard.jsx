@@ -54,24 +54,24 @@ export default function AdminDashboard() {
         <nav className="mt-4 space-y-2">
           <Button
             variant="ghost"
-            className={`w-full justify-start ${activeComponent === "bookings" ? "bg-gray-200" : ""}`}
+            className={`w-full justify-start  text-base  ${activeComponent === "bookings" ? "bg-gray-200" : ""}`}
             onClick={() => setActiveComponent("bookings")}
           >
-            <LayoutDashboard className="mr-2 h-5 w-5" /> Bookings
+            <LayoutDashboard className="mr-2 h-7 w-7" /> Bookings
           </Button>
           <Button
             variant="ghost"
-            className={`w-full justify-start ${activeComponent === "venues" ? "bg-gray-200" : ""}`}
+            className={`w-full justify-start text-base ${activeComponent === "venues" ? "bg-gray-200" : ""}`}
             onClick={() => setActiveComponent("venues")}
           >
-            <Hotel className="mr-2 h-5 w-5" /> Venues
+            <Hotel className="mr-2 h-7 w-7" /> Venues
           </Button>
           <Button
             variant="ghost"
-            className={`w-full justify-start ${activeComponent === "messages" ? "bg-gray-200" : ""}`}
+            className={`w-full justify-start text-base ${activeComponent === "messages" ? "bg-gray-200" : ""}`}
             onClick={() => setActiveComponent("messages")}
           >
-            <Mail className="mr-2 h-5 w-5" /> Messages
+            <Mail className="mr-2 h-7 w-7" /> Messages
           </Button>
         </nav>
       </div>
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" /> Total Bookings
+                    <Calendar className="h-7 w-7" /> Total Bookings
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Hotel className="h-5 w-5" /> Total Venues
+                    <Hotel className="h-7 w-7" /> Total Venues
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -113,7 +113,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Mail className="h-5 w-5" /> New Messages
+                    <Mail className="h-7 w-7" /> New Messages
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

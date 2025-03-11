@@ -2,26 +2,26 @@ import React, { useState } from 'react';
 import { useAdminAuth } from '../contexts/AdminAuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Loader2, Mail, Lock } from 'lucide-react'; 
+import { Loader2, Mail, Lock } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function AdminLogin() {
   const { login } = useAdminAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     setLoading(true);
 
     try {
       await login(email, password);
+      toast.success('Login successful!');
       navigate('/admin');
     } catch {
-      setError('Invalid credentials');
+      toast.error('Invalid credentials. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ export default function AdminLogin() {
           <h2 className="text-center text-3xl font-bold text-gray-900">Admin Login</h2>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-            <div> 
+            <div>
               <div className="flex items-center border-b-2 border-gray-300 focus-within:border-indigo-500 transition">
                 <Mail className="w-5 h-5 text-gray-400 mr-2" />
                 <input
@@ -57,12 +57,12 @@ export default function AdminLogin() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full py-2 bg-transparent outline-none text-gray-900"
-                  placeholder='Email'
+                  placeholder="Email"
                 />
               </div>
             </div>
 
-            <div> 
+            <div>
               <div className="flex items-center border-b-2 border-gray-300 focus-within:border-indigo-500 transition">
                 <Lock className="w-5 h-5 text-gray-400 mr-2" />
                 <input
@@ -74,20 +74,10 @@ export default function AdminLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full py-2 bg-transparent outline-none text-gray-900"
-                  placeholder='Secret Password'
+                  placeholder="Secret Password"
                 />
               </div>
             </div>
-
-            {error && (
-              <motion.div
-                className="bg-red-50 border border-red-200 text-red-700 rounded-md p-3 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                {error}
-              </motion.div>
-            )}
 
             <button
               type="submit"

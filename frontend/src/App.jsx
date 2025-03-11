@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext'; 
+import { AuthProvider } from './contexts/AuthContext';
 import { AdminAuthProvider } from './contexts/AdminAuthContext';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -19,7 +21,7 @@ import About from './pages/About';
 function App() {
   return (
     <Router>
-      <AuthProvider>  
+      <AuthProvider>
         <AdminAuthProvider>
           <div className="min-h-screen flex flex-col">
             <Navbar />
@@ -37,9 +39,17 @@ function App() {
               </Routes>
             </main>
             <Footer />
-          </div>  
+          </div>
         </AdminAuthProvider>
       </AuthProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable />
     </Router>
   );
 }

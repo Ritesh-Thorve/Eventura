@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify"; 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -106,12 +105,11 @@ export default function UserMessages() {
   };
 
   return (
-    <div>
-      <ToastContainer />
+    <div> 
       <Card>
         <CardHeader>
-          <CardTitle>User Messages</CardTitle>
-          <CardDescription>Manage all user messages</CardDescription>
+          <CardTitle className="text-xl font-bold">User Messages</CardTitle>
+          <CardDescription className="text-sm mt-2">Manage all user messages</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -123,7 +121,7 @@ export default function UserMessages() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="text-lg font-semibold"> 
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Message</TableHead>

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { useAuth } from "../contexts/AuthContext"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { MapPin, Calendar, Clock, Info, Trash2, Phone, Mail, Loader2, ArrowRight, CalendarCheck } from "lucide-react"
 import {
@@ -47,9 +46,7 @@ function MyBookings() {
 
       setBookings(response.data)
     } catch (error) {
-      toast.error("Failed to fetch bookings", {
-        icon: "❌",
-      })
+      toast.error("Failed to fetch bookings")
     } finally {
       setLoading(false)
     }
@@ -69,9 +66,7 @@ function MyBookings() {
         headers: { Authorization: `Bearer ${token}` },
       })
 
-      toast.success("Booking deleted successfully", {
-        icon: "✅",
-      })
+      toast.success("Booking deleted successfully")
       fetchBookings()
     } catch (error) {
       toast.error("Failed to delete booking")
@@ -116,6 +111,7 @@ function MyBookings() {
           <p className="text-slate-500 max-w-2xl mx-auto">Manage all your venue bookings in one place</p>
         </div>
 
+         { /*Show loader if bookings are still loading and show bookings if available */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
@@ -140,7 +136,7 @@ function MyBookings() {
                     <div className="flex items-start gap-2">
                       <Calendar className="text-emerald-500 h-5 w-5 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-bold text-slate-700">Event Date</p>
+                        <p className="text-base font-bold text-slate-700">Event Date</p>
                         <p className="text-slate-600">{formatDate(booking.eventDate)}</p>
                       </div>
                     </div>
@@ -148,7 +144,7 @@ function MyBookings() {
                     <div className="flex items-start gap-2">
                       <Clock className="text-amber-500 h-5 w-5 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-bold text-slate-700">Event Type</p>
+                        <p className="text-base font-bold text-slate-700">Event Type</p>
                         <p className="text-slate-600">{booking.eventType}</p>
                       </div>
                     </div>
@@ -156,7 +152,7 @@ function MyBookings() {
                     <div className="flex items-start gap-2">
                       <Calendar className="text-blue-500 h-5 w-5 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-bold text-slate-700">Appointment Date</p>
+                        <p className="text-base font-bold text-slate-700">Appointment Date</p>
                         <p className="text-slate-600">{formatDate(booking.appointmentDate)}</p>
                       </div>
                     </div>
@@ -164,8 +160,8 @@ function MyBookings() {
                     <div className="flex items-start gap-2">
                       <Info className="text-purple-500 h-5 w-5 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-bold text-slate-700">Status</p>
-                        <p className="text-slate-600 font-bold"> <span className="font-bold text-xl">{booking.status}</span></p>
+                        <p className="text-base font-bold text-slate-700">Status</p>
+                        <p className="text-red-800 font-bold"> <span className="font-bold text-xl">{booking.status}</span></p>
                       </div>
                     </div>
                   </div>
@@ -173,7 +169,7 @@ function MyBookings() {
                   <Separator className="my-2" />
 
                   <div className="space-y-2">
-                    <h3 className="text-sm font-bold text-slate-700">Venue Contact</h3>
+                    <h3 className="text-base font-bold text-slate-700">Venue Contact</h3>
                     <div className="flex items-center gap-2">
                       <Phone className="text-indigo-500 h-4 w-4" />
                       <a href={`tel:${booking.venueContactPhone}`} className="text-slate-600 hover:text-indigo-500">
@@ -190,8 +186,8 @@ function MyBookings() {
                 </CardContent>
 
                 <CardFooter className="bg-slate-50 flex justify-end pt-4">
-                  <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(booking)} className="gap-2">
-                    <Trash2 className="h-4 w-4" />
+                  <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(booking)} className="gap-2 text-sm">
+                    <Trash2 className="h-5 w-5" />
                     Cancel Booking
                   </Button>
                 </CardFooter>
@@ -223,15 +219,15 @@ function MyBookings() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl">Cancel this booking?</DialogTitle>
+            <DialogTitle className="text-2xl">Cancel this booking?</DialogTitle>
             <DialogDescription>
               {selectedBooking && (
-                <div className="mt-2 text-slate-600">
-                  <p>
+                <div className="mt-2 text-slate-600 ">
+                  <p className="text-base">
                     You're about to cancel your booking at <strong>{selectedBooking.venueName}</strong> for{" "}
                     <strong>{formatDate(selectedBooking.eventDate)}</strong>.
                   </p>
-                  <p className="mt-2">This action cannot be undone.</p>
+                  <p className="text-sm mt-2">This action cannot be undone.</p>
                 </div>
               )}
             </DialogDescription>
@@ -246,9 +242,7 @@ function MyBookings() {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
-
-      <ToastContainer />
+      </Dialog> 
     </div>
   )
 }

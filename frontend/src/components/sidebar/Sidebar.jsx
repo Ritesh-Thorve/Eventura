@@ -13,8 +13,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
 import { motion } from 'framer-motion';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify'; 
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +22,7 @@ export default function Sidebar() {
   const { admin, logout: adminLogout } = useAdminAuth();
 
   const handleLogoutConfirm = () => {
-    toast.success('Logged out successfully ✅', {
+    toast.success('Logged out successfully', {
       position: 'top-right',
       autoClose: 3000,
     });
@@ -144,9 +143,7 @@ export default function Sidebar() {
             </div>
           </motion.div>
         </div>
-      )}
-
-      <ToastContainer />
+      )} 
     </div>
   );
 }
