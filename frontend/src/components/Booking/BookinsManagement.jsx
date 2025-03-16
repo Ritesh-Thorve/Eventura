@@ -154,6 +154,7 @@ export default function BookingsManagement() {
                         : "Not assigned"}
                     </TableCell>
 
+                     {/* edit appointement date */}
                     <TableCell>
                       <Input
                         type="date"
@@ -166,6 +167,7 @@ export default function BookingsManagement() {
                       />
                     </TableCell>
 
+                    {/* set booking status */}
                     <TableCell>
                       <Badge>{booking.status}</Badge>
                     </TableCell>
@@ -185,9 +187,11 @@ export default function BookingsManagement() {
                             </DialogHeader>
                             <div className="p-4">
                               <p><strong>Venue:</strong> {selectedBooking.venueName}</p>
+                              <p><strong>Price:</strong> {selectedBooking.price}/Day</p>
                               <p><strong>User:</strong> {selectedBooking.email}</p>
                               <p><strong>Event Type:</strong> {selectedBooking.eventType}</p>
                               <p><strong>Event Date:</strong> {new Date(selectedBooking.eventDate).toLocaleDateString()}</p>
+                              <p><strong>Days:</strong> {selectedBooking.numberOfDays}</p>
                               <p><strong>Appointment Date:</strong> {selectedBooking.appointmentDate ? new Date(selectedBooking.appointmentDate).toLocaleDateString() : "Not assigned"}</p>
                               <p><strong>Status:</strong> {selectedBooking.status}</p>
                               <p><strong>Mobile Number:</strong> {selectedBooking.phone}</p>

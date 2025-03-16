@@ -10,6 +10,7 @@ function Venues() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  {/* All venues */}
   useEffect(() => {
     fetch('http://localhost:8000/api/venues')
       .then((response) => response.json())
@@ -39,6 +40,7 @@ function Venues() {
           Find Your Perfect Venue
         </h1>
         
+        {/* mapping all venues */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {venues.map((venue) => (
             <VenueCard

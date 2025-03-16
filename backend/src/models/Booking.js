@@ -6,11 +6,13 @@ const bookingSchema = new mongoose.Schema({
   email: { type: String, required: true },
   eventType: { type: String, required: true },
   eventDate: { type: Date, required: true },
-  phone: { type: String, required: true }, // Add phone field
-  name: { type: String, required: true }, // Add name field
-  location: { type: String, required: true }, // Add location field
+  numberOfDays: { type: Number, required: true },   
+  phone: { type: String, required: true }, 
+  name: { type: String, required: true }, 
+  location: { type: String, required: true }, 
   status: { type: String, default: "Pending" },
-  appointmentDate: Date, // Optional field
+  price: { type: Number, required: true },
+  appointmentDate: Date,  
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

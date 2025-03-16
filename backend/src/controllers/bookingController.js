@@ -4,19 +4,21 @@ const Venue = require("../models/Venue");
 // Create a new booking
 exports.createBooking = async (req, res) => {
   try {
-    const { userId, venueName, email, eventType, eventDate, phone, name, location, appointmentDate } = req.body;
+    const { userId, venueName, price, email, eventType, eventDate, numberOfDays, phone, name, location, appointmentDate } = req.body;
 
     // Validate required fields
-    if (!userId || !venueName || !email || !eventType || !eventDate || !phone || !name || !location) {
+    if (!userId || !venueName || !price || !email || !eventType || !eventDate || !numberOfDays || !phone || !name || !location) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const newBooking = new Booking({
       userId,
       venueName,
+      price,
       email,
       eventType,
       eventDate,
+      numberOfDays,
       phone,
       name,
       location,

@@ -11,7 +11,7 @@ function FeaturedVenues() {
             image: "hotel_silver_palace.jpg",
             description: "Premium venues, flawless experiences, unforgettable events!",
             location: "Jalgaon, MH",
-            path: '/venues',
+            path: '/#',
         },
         {
             title: "Aditya Garden",

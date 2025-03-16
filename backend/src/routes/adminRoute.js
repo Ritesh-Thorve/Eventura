@@ -14,15 +14,18 @@ const { getMessages, markAsRead, deleteMessage, sendMail } = require("../control
 
 router.post('/register', registerAdmin);
 router.post('/login', loginAdmin);
+
 router.get('/allbookings', adminAuth, getAllBookings);
+router.put('/bookings/:id/status', adminAuth, updateBookingStatus);
+router.put('/bookings/:id/assign-date', adminAuth, setAppointmentDate);
+
 router.get('/venues', adminAuth, getVenues);
 router.post('/addvenue', adminAuth, addVenue);
 router.put('/updatevenue/:id', adminAuth, updateVenue);
 router.delete('/delete/:id', adminAuth, deleteVenue);
-router.put('/bookings/:id/status', adminAuth, updateBookingStatus);
-router.put('/bookings/:id/assign-date', adminAuth, setAppointmentDate);
-router.get('/getstats', adminAuth, getStats); 
 
+
+router.get('/getstats', adminAuth, getStats); 
 router.get("/messages", adminAuth, getMessages);
 router.put("/messages/:id/read", adminAuth, markAsRead);
 router.delete("/messages/:id", adminAuth, deleteMessage);

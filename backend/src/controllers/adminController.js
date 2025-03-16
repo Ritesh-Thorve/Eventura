@@ -5,6 +5,7 @@ const Message = require('../models/Message');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+//admin regestration only first time
 const registerAdmin = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -21,6 +22,7 @@ const registerAdmin = async (req, res) => {
   }
 };
 
+//admin login
 const loginAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -38,9 +40,10 @@ const loginAdmin = async (req, res) => {
   }
 };
 
+//geting all bookings of the user
 const getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find(); // Fetch all bookings
+    const bookings = await Booking.find();  
     res.json(bookings);
   } catch (error) {
     console.error("Error fetching bookings:", error);
@@ -48,6 +51,7 @@ const getAllBookings = async (req, res) => {
   }
 };
 
+//update booking status
 const updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -66,6 +70,7 @@ const updateBookingStatus = async (req, res) => {
   }
 };
 
+//set an appointement date to the user
 const setAppointmentDate = async (req, res) => {
   try {
     const { id } = req.params;
@@ -87,6 +92,7 @@ const setAppointmentDate = async (req, res) => {
   }
 };
 
+//geting stats of venue, bookings and messages
 const getStats = async (req, res) => {
   try {
     const totalBookings = await Booking.countDocuments();

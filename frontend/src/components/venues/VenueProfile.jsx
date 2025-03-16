@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { X, Users, MapPin, Calendar, Clock, Phone, Mail, IndianRupee, CheckCircle } from 'lucide-react';
 import { BookingForm } from '../Booking/BookingForm';
-import { useAuth } from '../../contexts/AuthContext'; // Import Auth Context
+import { useAuth } from '../../contexts/AuthContext';  
 import { toast } from 'react-toastify';
 
 export function VenueProfile({ venueId, onClose }) {
@@ -10,8 +10,9 @@ export function VenueProfile({ venueId, onClose }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showBookingForm, setShowBookingForm] = useState(false);
-  const { user } = useAuth(); // Get logged-in user
+  const { user } = useAuth();  
 
+  {/* particular venue detail */}
   useEffect(() => {
     const fetchVenueDetails = async () => {
       try {
@@ -88,7 +89,7 @@ export function VenueProfile({ venueId, onClose }) {
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <IndianRupee className="text-indigo-600" />
-                  <span>Price: ₹{venue.price.toLocaleString()}</span>
+                  <span>Price: ₹{venue.price.toLocaleString()} / 1Hour</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <Calendar className="text-indigo-600" />

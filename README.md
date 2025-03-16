@@ -9,7 +9,7 @@ Eventura is a full-stack event management platform where users can explore and b
 ### 🧑‍💼 User Side
 - Browse venue listings with details and images.
 - Book a venue by filling out a simple form.
-- Contact admins via email or mobile number.
+- Contact venue manager via email or mobile number.
 
 ### 🔐 Admin Side
 - Secure admin login and authentication.
@@ -34,8 +34,7 @@ Eventura is a full-stack event management platform where users can explore and b
 ### Backend
 - Node.js
 - Express.js (CommonJS)
-- MongoDB + Mongoose
-- Nodemailer
+- MongoDB   
 - JWT Authentication
 - CORS
 
@@ -45,11 +44,10 @@ Eventura is a full-stack event management platform where users can explore and b
 
 ### Backend (`/backend`)
 ```
-/controllers     → Route logic (bookings, venues, admin, auth)
+/controllers     → Route logic (bookings, venues, admin, auth, message)
 /routes          → Express route definitions
-/models          → MongoDB models (User, Booking, Venue, Admin)
-/utils           → Helper functions (email, JWT)
-/config          → MongoDB & other configurations
+/models          → MongoDB models (User, Booking, Venue, Admin, Message)
+/config          → MongoDB configurations
 server.js        → App entry point
 ```
 

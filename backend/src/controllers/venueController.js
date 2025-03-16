@@ -20,8 +20,7 @@ const addVenue = async (req, res) => {
     await venue.save();
 
     res.status(201).json({ message: "Venue added successfully", venue });
-  } catch (error) {
-    console.error("Error adding venue:", error);
+  } catch (error) { 
     res.status(500).json({ message: "Failed to add venue", error: error.message });
   }
 };
@@ -30,7 +29,7 @@ const addVenue = async (req, res) => {
 const updateVenue = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Updating venue with ID:", id);
+ 
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid venue ID" });
@@ -43,8 +42,7 @@ const updateVenue = async (req, res) => {
     }
 
     res.json({ message: "Venue updated successfully", updatedVenue });
-  } catch (error) {
-    console.error("Error updating venue:", error);
+  } catch (error) { 
     res.status(500).json({ message: "Failed to update venue", error: error.message });
   }
 };
