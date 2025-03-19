@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 // Register
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const userExists = await User.findOne({ email });
@@ -19,7 +19,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // Login
-exports.loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -33,7 +33,7 @@ exports.loginUser = async (req, res) => {
 };
 
 // Get Profile
-exports.getProfile = async (req, res) => {
+const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -42,4 +42,10 @@ exports.getProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getProfile
 };

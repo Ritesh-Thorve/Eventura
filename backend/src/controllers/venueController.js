@@ -11,14 +11,24 @@ const getVenues = async (req, res) => {
   }
 };
 
+// Get a single venue details by ID
+const venueDetails = async (req,res) => {
+  try {
+    const venue = await Venue.findById(req.params.id);
+    if (!venue) {
+      return res.status(404).json({ message: 'Venue not found' });
+    }
+    res.json(venue);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+}
+
 // Add a new venue
 const addVenue = async (req, res) => {
   try {
-    console.log("Received venue data:", req.body); 
-
     const venue = new Venue(req.body);
     await venue.save();
-
     res.status(201).json({ message: "Venue added successfully", venue });
   } catch (error) { 
     res.status(500).json({ message: "Failed to add venue", error: error.message });
@@ -29,8 +39,6 @@ const addVenue = async (req, res) => {
 const updateVenue = async (req, res) => {
   try {
     const { id } = req.params;
- 
-
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid venue ID" });
     }
@@ -68,4 +76,10 @@ const deleteVenue = async (req, res) => {
   }
 };
 
-module.exports = { getVenues, addVenue, updateVenue, deleteVenue };
+module.exports = { 
+  getVenues, 
+  venueDetails,
+  addVenue, 
+  updateVenue, 
+  deleteVenue 
+};

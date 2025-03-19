@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-exports.protect = async (req, res, next) => {
+ const userAuth = async (req, res, next) => {
   let token;
   if (req.headers.authorization?.startsWith('Bearer')) {
     try {
@@ -16,3 +16,5 @@ exports.protect = async (req, res, next) => {
     res.status(401).json({ message: 'No token provided' });
   }
 };
+
+module.exports = userAuth;

@@ -2,6 +2,16 @@ const Message = require("../models/Message");
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
+const sendMessage = async (req, res) =>{
+   try {
+          const message = new Message(req.body);
+          await message.save();
+          res.status(201).json({ message: "Message sent successfully" });
+      } catch (error) {
+          res.status(500).json({ message: "Failed to send message", error });
+      }
+}
+
 // Get all messages
 const getMessages = async (req, res) => {
   try {
@@ -56,7 +66,7 @@ const sendMail = async (req, res) => {
       service: "Gmail",
       auth: {
         user: process.env.EMAIL_ADMIN, // Your Gmail address
-        pass: process.env.EMAIL_PASS,  // App Password (not your Gmail password)
+        pass: process.env.EMAIL_PASS,  // App Password (not your Gmail password) creat at                     https://myaccount.google.com/apppasswords
       },
     });
 
@@ -77,4 +87,10 @@ const sendMail = async (req, res) => {
 };
 
 
-module.exports = { getMessages, markAsRead, deleteMessage, sendMail };
+module.exports = { 
+  getMessages, 
+  sendMessage,
+  markAsRead, 
+  deleteMessage, 
+  sendMail 
+};

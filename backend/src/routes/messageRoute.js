@@ -1,15 +1,7 @@
 const express = require('express');
-const Message = require('../models/Message');
+const { sendMessage } = require('../controllers/messageController');
 const router = express.Router();
 
-router.post('/new-message', async (req, res) => {
-    try {
-        const message = new Message(req.body);
-        await message.save();
-        res.status(201).json({ message: "Message sent successfully" });
-    } catch (error) {
-        res.status(500).json({ message: "Failed to send message", error });
-    }
-});
+router.post('/new-message', sendMessage );
 
 module.exports = router;

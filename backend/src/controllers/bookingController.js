@@ -2,7 +2,7 @@ const Booking = require("../models/Booking");
 const Venue = require("../models/Venue");
 
 // Create a new booking
-exports.createBooking = async (req, res) => {
+const createBooking = async (req, res) => {
   try {
     const { userId, venueName, price, email, eventType, eventDate, numberOfDays, phone, name, location, appointmentDate } = req.body;
 
@@ -34,7 +34,7 @@ exports.createBooking = async (req, res) => {
 };
 
 // Get all bookings for the logged-in user (with venue contact info)
-exports.getAllBookings = async (req, res) => {
+const getAllBookings = async (req, res) => {
   try {
     if (!req.user || !req.user.email) {
       return res.status(401).json({ message: "Unauthorized. Please log in." });
@@ -63,7 +63,7 @@ exports.getAllBookings = async (req, res) => {
 };
 
 // Delete a booking
-exports.deleteBooking = async (req, res) => {
+const deleteBooking = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id);
 
@@ -82,4 +82,10 @@ exports.deleteBooking = async (req, res) => {
     console.error("Error deleting booking:", error);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+module.exports = {
+  createBooking,
+  getAllBookings,
+  deleteBooking
 };
