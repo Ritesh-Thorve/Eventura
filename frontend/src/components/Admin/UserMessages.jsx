@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -91,21 +91,32 @@ export default function UserMessages() {
   const handleSendMail = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.post("http://localhost:8000/api/admin/send-mail", {
-        email: selectedMessage.email,
-        content: emailContent,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+
+      await axios.post(
+        "http://localhost:8000/api/admin/send-mail",
+        {
+          email: selectedMessage.email,    // email field
+          message: emailContent,           
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       toast.success("Email sent successfully");
       setShowMailModal(false);
     } catch (err) {
+      console.error("Email send error:", err.response?.data || err.message);
       toast.error("Failed to send email");
     }
   };
 
+
   return (
-    <div> 
+    <div>
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold">User Messages</CardTitle>
@@ -121,7 +132,7 @@ export default function UserMessages() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="text-lg font-semibold"> 
+                <TableRow className="text-lg font-semibold">
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Message</TableHead>
@@ -186,10 +197,10 @@ export default function UserMessages() {
             <DialogHeader>
               <DialogTitle>Send Email to {selectedMessage.email}</DialogTitle>
             </DialogHeader>
-            <Textarea 
-              placeholder="Enter your message..." 
-              value={emailContent} 
-              onChange={(e) => setEmailContent(e.target.value)} 
+            <Textarea
+              placeholder="Enter your message..."
+              value={emailContent}
+              onChange={(e) => setEmailContent(e.target.value)}
             />
             <Button onClick={handleSendMail}>Send Email</Button>
           </DialogContent>

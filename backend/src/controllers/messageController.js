@@ -1,4 +1,6 @@
 const Message = require("../models/Message");
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 // Get all messages
 const getMessages = async (req, res) => {
@@ -41,18 +43,38 @@ const deleteMessage = async (req, res) => {
 
 // Send an email (mock function)
 const sendMail = async (req, res) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).json({ error: "Email is required" });
+  const { email, message } = req.body;
+
+  // Validate input
+  if (!email || !message) {
+    return res.status(400).json({ error: "Email and message are required" });
   }
 
-  // Mock email sending logic
   try {
-    console.log(`Sending email to ${email}...`);
-    res.json({ message: "Email sent successfully" });
+    // Create transporter
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_ADMIN, // Your Gmail address
+        pass: process.env.EMAIL_PASS,  // App Password (not your Gmail password)
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: process.env.EMAIL_ADMIN,
+      to: email,
+      subject: "Message from Eventura Admin",
+      text: message, 
+    };
+
+    // Send email
+    const info = await transporter.sendMail(mailOptions);
+    return res.json({ message: "Email sent successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Failed to send email" });
+    return res.status(500).json({ error: "Failed to send email" });
   }
 };
+
 
 module.exports = { getMessages, markAsRead, deleteMessage, sendMail };
