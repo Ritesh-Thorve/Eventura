@@ -2,6 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AdminAuthProvider } from './contexts/AdminAuthContext';
+import { AdminMessageProvider } from "./contexts/AdminMessageContext";
+import { VenuesProvider } from "./contexts/VenuesContext";
+import { BookingProvider } from './contexts/BookingContext';
+import { BookingsProvider } from "./contexts/BookingsContext";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Navbar from './components/Navbar';
@@ -24,23 +28,35 @@ function App() {
       <Router>
         <AuthProvider>
           <AdminAuthProvider>
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-                  <Route path="/admin-login" element={<AdminLogin />} />
-                  <Route path="/venues" element={<Venues />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/mybookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
+            <VenuesProvider>
+            <AdminMessageProvider>
+              <BookingProvider>
+              <BookingsProvider> 
+                <div className="min-h-screen flex flex-col">
+                  <Navbar />
+                  <main className="flex-grow">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+
+                      
+                      <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                      <Route path="/admin-login" element={<AdminLogin />} />
+                     
+
+                      <Route path="/venues" element={<Venues />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/mybookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </div>
+                </BookingsProvider>
+              </BookingProvider>
+            </AdminMessageProvider>
+            </VenuesProvider>
           </AdminAuthProvider>
         </AuthProvider>
       </Router>
@@ -52,7 +68,7 @@ function App() {
         closeOnClick
         pauseOnHover
         draggable />
-    </div>
+    </div >
   );
 }
 

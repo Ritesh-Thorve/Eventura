@@ -1,90 +1,42 @@
 "use client";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { Search } from "lucide-react";
-import { Badge } from "../../components/ui/Badge";
+import { Badge } from "../ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { toast } from "react-toastify"; 
+import { useBookings } from "../../contexts/BookingsContext";
+import { useEffect } from "react";
 
 export default function BookingsManagement() {
-  const [bookings, setBookings] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [selectedBooking, setSelectedBooking] = useState(null);
-  const [editingAppointmentDate, setEditingAppointmentDate] = useState(null);
+  const {
+    bookings,
+    statusFilter,
+    searchQuery,
+    loading,
+    error,
+    selectedBooking,
+    editingAppointmentDate,
+    setStatusFilter,
+    setSearchQuery,
+    setSelectedBooking,
+    setEditingAppointmentDate,
+    fetchBookings,
+    updateBookingStatus,
+    updateAppointmentDate,
+    filteredBookings,
+  } = useBookings();
 
   useEffect(() => {
     fetchBookings();
-  }, []);
-
-  const fetchBookings = async () => {
-    try {
-      const token = localStorage.getItem("adminToken");
-      const response = await axios.get("http://localhost:8000/api/admin/allbookings", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setBookings(response.data);
-    } catch (err) {
-      setError("Failed to fetch bookings");
-      toast.error("No Bookings Found");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateBookingStatus = async (id, status) => {
-    try {
-      const token = localStorage.getItem("adminToken");
-      await axios.put(
-        `http://localhost:8000/api/admin/bookings/${id}/status`,
-        { status },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success(`Booking marked as ${status}`);
-      fetchBookings();
-    } catch (error) {
-      toast.error("Failed to update status");
-    }
-  };
-
-  const updateAppointmentDate = async (id, newDate) => {
-    try {
-      const token = localStorage.getItem("adminToken");
-      await axios.put(
-        `http://localhost:8000/api/admin/bookings/${id}/assign-date`,
-        { appointmentDate: newDate },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("Appointment date updated successfully");
-      fetchBookings(); // Refresh the bookings list
-    } catch (error) {
-      toast.error("Failed to update appointment date");
-    }
-  };
-
-  const filteredBookings = bookings.filter((booking) => {
-    const matchesStatus = statusFilter === "all" || booking.status.toLowerCase() === statusFilter.toLowerCase();
-    const matchesSearch = searchQuery
-      ? booking.venueName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        booking.email.toLowerCase().includes(searchQuery.toLowerCase())
-      : true;
-
-    return matchesStatus && matchesSearch;
-  });
+  }, [fetchBookings]);
 
   return (
     <div className="flex flex-col p-14 gap-6">
-
       {/* Filters Section */}
       <div className="flex justify-between items-center mb-4">
-
         {/* Search Input */}
         <div className="relative w-1/3">
           <Search className="absolute left-2 top-2 h-4 w-4 text-muted-foreground" />
@@ -154,7 +106,7 @@ export default function BookingsManagement() {
                         : "Not assigned"}
                     </TableCell>
 
-                     {/* edit appointement date */}
+                    {/* edit appointment date */}
                     <TableCell>
                       <Input
                         type="date"

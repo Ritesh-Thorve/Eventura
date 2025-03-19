@@ -4,7 +4,7 @@ import axios from "axios";
 import { LayoutDashboard, Calendar, MessageCircle, BarChart, Loader2, Hotel, Mail } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import BookingsManagement from "../components/Booking/BookinsManagement";
+import BookingsManagement from "../components/Booking/BookingsManagement";
 import VenuesManagement from "../components/venues/VenuesManagement";
 import UserMessages from "../components/Admin/UserMessages";
 

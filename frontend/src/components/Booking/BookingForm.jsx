@@ -1,9 +1,9 @@
-// Add this to your imports
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useBooking } from '../../contexts/BookingContext';  
 
 const eventTypes = [
   'Wedding',
@@ -17,6 +17,7 @@ const eventTypes = [
 
 export function BookingForm({ venue, onClose }) {
   const { user } = useAuth();
+  const { createBooking } = useBooking(); //  Destructure createBooking
 
   const [formData, setFormData] = useState({
     userId: user?._id || '',
@@ -28,7 +29,7 @@ export function BookingForm({ venue, onClose }) {
     numberOfDays: 1,
     phone: '',
     location: '',
-    price: venue?.price || '', // ✅ Added venue price
+    price: venue?.price || '',
   });
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export function BookingForm({ venue, onClose }) {
       setFormData((prev) => ({
         ...prev,
         venueName: venue.name,
-        price: venue.price, // ✅ Ensure price is updated if venue changes
+        price: venue.price,
       }));
     }
   }, [user, venue]);
@@ -53,29 +54,39 @@ export function BookingForm({ venue, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const {
+      userId,
+      venueName,
+      email,
+      eventType,
+      name,
+      phone,
+      location,
+      eventDate,
+      numberOfDays,
+      price,
+    } = formData;
+
     if (
-      !formData.userId ||
-      !formData.venueName ||
-      !formData.email ||
-      !formData.eventType || 
-      !formData.name ||
-      !formData.phone ||
-      !formData.location ||
-      !formData.eventDate ||
-      !formData.numberOfDays ||
-      !formData.price
+      !userId ||
+      !venueName ||
+      !email ||
+      !eventType ||
+      !name ||
+      !phone ||
+      !location ||
+      !eventDate ||
+      !numberOfDays ||
+      !price
     ) {
       toast.error('Please fill in all fields.');
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/api/bookings/addbookings', formData);
-
-      if (response.status === 201) {
-        toast.success('Appointment booked successfully! we will contact you shortly.');
-        onClose();
-      }
+      await createBooking(formData); // ✅ Submit using context
+      toast.success('Appointment booked successfully! We will contact you shortly.');
+      onClose();
     } catch (error) {
       toast.error('Failed to book appointment. Please try again.');
     }
