@@ -21,7 +21,7 @@ export const AdminProvider = ({ children }) => {
       }
 
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/getstats`, {
+        const response = await axios.get(`http://localhost:8000/api/admin/getstats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStats(response.data);
