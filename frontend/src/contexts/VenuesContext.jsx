@@ -5,11 +5,22 @@ import { toast } from "react-toastify";
 const VenuesContext = createContext();
 
 export const VenuesProvider = ({ children }) => {
+  // State for managing venues  
   const [venues, setVenues] = useState([]);
+  const [selectedVenue, setSelectedVenue] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // New state for VenueProfile
+  const [venueDetails, setVenueDetails] = useState(null);
+  const [venueLoading, setVenueLoading] = useState(true);
+  const [venueError, setVenueError] = useState("");
+  const [showBookingForm, setShowBookingForm] = useState(false);
+
+  // State for managing venue management  
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedVenue, setSelectedVenue] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [errors, setErrors] = useState({});
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -33,6 +44,34 @@ export const VenuesProvider = ({ children }) => {
     },
   });
 
+  // Fetch venue details for VenueProfile
+  const fetchVenueDetails = async (venueId) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/venues/${venueId}`);
+      setVenueDetails(response.data);
+    } catch (err) {
+      setVenueError("Failed to fetch venue details");
+      toast.error("Failed to fetch venue details");
+    } finally {
+      setVenueLoading(false);
+    }
+  };
+
+  
+  // Handle booking appointment
+  const handleBookAppointment = (user) => {
+    if (!user) {
+      toast.error("You need to log in to book an appointment!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+    setShowBookingForm(true);
+  };
+
+  // Fetch all venues (from Venues component)
   useEffect(() => {
     fetchVenues();
   }, []);
@@ -41,20 +80,21 @@ export const VenuesProvider = ({ children }) => {
     try {
       const response = await axios.get("http://localhost:8000/api/venues");
       setVenues(response.data);
-    } catch (error) {
-      console.error("Failed to fetch venues:", error);
-      setVenues([]);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to load venues");
+      setLoading(false);
+      toast.error("Failed to fetch venues");
     }
   };
 
-  const filteredVenues = venues
-    .filter((venue) => venue)
-    .filter((venue) => {
-      const name = venue?.name?.toLowerCase() || "";
-      const location = venue?.location?.toLowerCase() || "";
-      return name.includes(searchQuery.toLowerCase()) || location.includes(searchQuery.toLowerCase());
-    });
+  // Handle viewing a venue profile (from Venues component)
+  const handleViewProfile = (id) => {
+    const venue = venues.find((v) => v.id === id);
+    if (venue) setSelectedVenue(venue);
+  };
 
+  // Functions for venue management (from existing context)
   const resetFormData = () => {
     setFormData({
       name: "",
@@ -205,16 +245,37 @@ export const VenuesProvider = ({ children }) => {
   return (
     <VenuesContext.Provider
       value={{
+        // State and functions for viewing venues
         venues,
+        selectedVenue,
+        loading,
+        error,
+        handleViewProfile,
+        setSelectedVenue,
+
+        // state and functions for VenueProfile
+        venueDetails,
+        venueLoading,
+        venueError,
+        showBookingForm,
+        fetchVenueDetails,
+        fetchVenues,
+        handleBookAppointment,
+        setShowBookingForm,
+
+        // State and functions for managing venues
         isAddDialogOpen,
         isEditDialogOpen,
         isDeleteDialogOpen,
-        selectedVenue,
         searchQuery,
         errors,
         formData,
         daysOfWeek,
-        filteredVenues,
+        filteredVenues: venues.filter((venue) => {
+          const name = venue?.name?.toLowerCase() || "";
+          const location = venue?.location?.toLowerCase() || "";
+          return name.includes(searchQuery.toLowerCase()) || location.includes(searchQuery.toLowerCase());
+        }),
         setSearchQuery,
         setErrors,
         setFormData,

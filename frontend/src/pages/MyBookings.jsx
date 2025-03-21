@@ -49,7 +49,7 @@ function MyBookings() {
       });
 
       if (response.data.length === 0) {
-        console.log("No bookings found. Book a venue now!");
+        toast.alert("No bookings found. Book a venue now!");
       }
 
       setBookings(response.data);

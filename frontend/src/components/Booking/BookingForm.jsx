@@ -199,7 +199,7 @@ export function BookingForm({ venue, onClose }) {
 
             {/* Venue Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Venue Price (₹)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Venue Price (₹)/Day</label>
               <input
                 type="number"
                 readOnly

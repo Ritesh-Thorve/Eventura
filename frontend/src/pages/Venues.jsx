@@ -1,36 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import { VenueCard } from '../components/venues/VenueCard';
+import React, { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { VenueCard } from '../components/venues/venueCard';
 import { VenueProfile } from '../components/venues/VenueProfile';
+import { useVenues } from '../contexts/VenuesContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Venues() {
-  const [venues, setVenues] = useState([]);
+  // Use context API instead of local state for venues
+  const { venues, loading, error, handleViewProfile } = useVenues();
   const [selectedVenueId, setSelectedVenueId] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const fetchVenues = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get('http://localhost:8000/api/venues'); // ✅ No authentication needed
-        setVenues(response.data);
-      } catch (err) {
-        setError('Failed to load venues');
-        toast.error('Failed to load venues');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVenues();
-  }, []);
-
-  const handleViewProfile = (id) => {
-    setSelectedVenueId(id); // Set selected venue ID
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 py-24 px-4 sm:px-6 lg:px-8">
@@ -49,13 +27,13 @@ function Venues() {
               imageUrl={venue.imageUrl}
               capacity={venue.capacity}
               services={venue.services}
-              onViewProfile={handleViewProfile}
+              onViewProfile={() => setSelectedVenueId(venue._id)}
             />
           ))}
         </div>
         {selectedVenueId && (
           <VenueProfile
-            venueId={selectedVenueId} 
+            venueId={selectedVenueId}
             onClose={() => setSelectedVenueId(null)}
           />
         )}

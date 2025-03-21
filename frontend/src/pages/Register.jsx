@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Loader2, User, Mail, Lock } from 'lucide-react';
-import axios from 'axios';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Loader2, User, Mail, Lock } from "lucide-react";
+import { motion } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext"; // Import the AuthContext
+import { toast } from "react-toastify";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth(); // Use the register function from AuthContext
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,23 +26,21 @@ export default function Register() {
     e.preventDefault();
     setError(null);
 
+    // Validate password match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:8000/api/auth/register', {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password
-      });
-
-      navigate('/login');
+      await register(formData.name, formData.email, formData.password); // Use the register function from AuthContext
+      toast.success("Registration successful! You are now logged in.");
+      navigate("/"); // Redirect to home page after successful registration
     } catch (err) {
-      setError('Failed to create account. Please try again.');
+      setError("Failed to create account. Please try again.");
+      toast.error("Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ export default function Register() {
         className="w-full max-w-3xl bg-white rounded-xl shadow-lg flex overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         {/* Left Side: Image */}
         <div className="hidden md:flex w-1/2  items-center justify-center p-6">
@@ -71,7 +71,7 @@ export default function Register() {
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900">Create an Account</h2>
             <p className="text-gray-500 mt-1">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link to="/login" className="text-indigo-600 hover:underline">
                 Sign in
               </Link>
@@ -154,7 +154,7 @@ export default function Register() {
               disabled={loading}
               className="w-full flex items-center justify-center py-3 px-4 bg-indigo-600 text-white font-medium rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 disabled:bg-indigo-400"
             >
-              {loading ? <Loader2 className="animate-spin w-5 h-5 mr-2" /> : 'Create Account'}
+              {loading ? <Loader2 className="animate-spin w-5 h-5 mr-2" /> : "Create Account"}
             </button>
           </form>
         </div>

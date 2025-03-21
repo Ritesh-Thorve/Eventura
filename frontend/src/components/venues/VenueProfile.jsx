@@ -1,56 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { X, Users, MapPin, Calendar, Clock, Phone, Mail, IndianRupee, CheckCircle } from 'lucide-react';
-import { BookingForm } from '../Booking/BookingForm';
-import { useAuth } from '../../contexts/AuthContext';  
-import { toast } from 'react-toastify';
+import React, { useEffect } from "react";
+import { X, Users, MapPin, Calendar, Clock, Phone, Mail, IndianRupee, CheckCircle } from "lucide-react";
+import { BookingForm } from "../Booking/BookingForm";
+import { useAuth } from "../../contexts/AuthContext";
+import { useVenues } from "../../contexts/VenuesContext";  
 
 export function VenueProfile({ venueId, onClose }) {
-  const [venue, setVenue] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [showBookingForm, setShowBookingForm] = useState(false);
-  const { user } = useAuth();  
+  const { user } = useAuth();
+  const {
+    venueDetails,
+    venueLoading,
+    venueError,
+    showBookingForm,
+    fetchVenueDetails,
+    handleBookAppointment,
+    setShowBookingForm,
+  } = useVenues();
 
-  {/* particular venue detail */}
+  // Fetch venue details when venueId changes
   useEffect(() => {
-    const fetchVenueDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/venues/${venueId}`);
-        setVenue(response.data);
-      } catch (err) {
-        setError('Failed to fetch venue details');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (venueId) {
-      fetchVenueDetails();
+      fetchVenueDetails(venueId);
     }
-  }, [venueId]);
+  }, [venueId, fetchVenueDetails]);
 
-  const handleBookAppointment = () => {
-    if (!user) {
-      toast.error('You need to log in to book an appointment!', {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: true,
-      });
-      return;
-    }
-    setShowBookingForm(true);
-  };
-
-  if (loading) {
+  if (venueLoading) {
     return <div className="text-center py-10">Loading venue details...</div>;
   }
 
-  if (error) {
-    return <div className="text-center text-red-500 py-10">{error}</div>;
+  if (venueError) {
+    return <div className="text-center text-red-500 py-10">{venueError}</div>;
   }
 
-  if (!venue) {
+  if (!venueDetails) {
     return <div className="text-center text-gray-600 py-10">Venue not found</div>;
   }
 
@@ -66,38 +47,38 @@ export function VenueProfile({ venueId, onClose }) {
               <X size={24} />
             </button>
             <img
-              src={venue.imageUrl}
-              alt={venue.name}
+              src={venueDetails.imageUrl}
+              alt={venueDetails.name}
               className="w-full h-64 object-cover"
-              onError={(e) => (e.target.src = '/default-image.jpg')} // Fallback image
+              onError={(e) => (e.target.src = "/default-image.jpg")} // Fallback image
             />
           </div>
 
           <div className="p-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">{venue.name}</h2>
-            <p className="text-gray-600">{venue.description}</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{venueDetails.name}</h2>
+            <p className="text-gray-600">{venueDetails.description}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-gray-700">
                   <Users className="text-indigo-600" />
-                  <span>Capacity: up to {venue.capacity} guests</span>
+                  <span>Capacity: up to {venueDetails.capacity} guests</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <MapPin className="text-indigo-600" />
-                  <span>{venue.location}</span>
+                  <span>{venueDetails.location}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <IndianRupee className="text-indigo-600" />
-                  <span>Price: ₹{venue.price.toLocaleString()} / 1Hour</span>
+                  <span>Price: ₹{venueDetails.price.toLocaleString()} / Day</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <Calendar className="text-indigo-600" />
-                  <span>{venue.availability?.days || 'Not specified'}</span>
+                  <span>{venueDetails.availability?.days || "Not specified"}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <Clock className="text-indigo-600" />
-                  <span>{venue.availability?.hours || 'Not specified'}</span>
+                  <span>{venueDetails.availability?.hours || "Not specified"}</span>
                 </div>
               </div>
 
@@ -105,14 +86,14 @@ export function VenueProfile({ venueId, onClose }) {
                 <h3 className="font-semibold text-lg text-gray-900">Contact Information</h3>
                 <div className="flex items-center gap-3 text-gray-700">
                   <Phone className="text-indigo-600" />
-                  <a href={`tel:${venue.contact?.phone}`} className="hover:text-indigo-600">
-                    {venue.contact?.phone || 'N/A'}
+                  <a href={`tel:${venueDetails.contact?.phone}`} className="hover:text-indigo-600">
+                    {venueDetails.contact?.phone || "N/A"}
                   </a>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <Mail className="text-indigo-600" />
-                  <a href={`mailto:${venue.contact?.email}`} className="hover:text-indigo-600">
-                    {venue.contact?.email || 'N/A'}
+                  <a href={`mailto:${venueDetails.contact?.email}`} className="hover:text-indigo-600">
+                    {venueDetails.contact?.email || "N/A"}
                   </a>
                 </div>
               </div>
@@ -124,7 +105,7 @@ export function VenueProfile({ venueId, onClose }) {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Services</h3>
                 <ul className="mt-2 space-y-2">
-                  {venue.services.map((service, index) => (
+                  {venueDetails.services.map((service, index) => (
                     <li key={index} className="flex items-center gap-2 text-gray-700">
                       <CheckCircle className="text-green-500" />
                       {service}
@@ -137,7 +118,7 @@ export function VenueProfile({ venueId, onClose }) {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Amenities</h3>
                 <ul className="mt-2 space-y-2">
-                  {venue.amenities.map((amenity, index) => (
+                  {venueDetails.amenities.map((amenity, index) => (
                     <li key={index} className="flex items-center gap-2 text-gray-700">
                       <CheckCircle className="text-blue-500" />
                       {amenity}
@@ -149,7 +130,7 @@ export function VenueProfile({ venueId, onClose }) {
 
             <div className="mt-6">
               <button
-                onClick={handleBookAppointment}
+                onClick={() => handleBookAppointment(user)}
                 className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 Book an Appointment
@@ -161,7 +142,7 @@ export function VenueProfile({ venueId, onClose }) {
 
       {showBookingForm && (
         <BookingForm
-          venue={venue}
+          venue={venueDetails}
           onClose={() => setShowBookingForm(false)}
         />
       )}

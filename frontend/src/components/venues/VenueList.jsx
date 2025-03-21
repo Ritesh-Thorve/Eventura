@@ -1,34 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import { VenueCard } from './VenueCard';
-import { VenueProfile } from './VenueProfile';
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import { ToastContainer } from "react-toastify";
+import { VenueCard } from "./venueCard";
+import { VenueProfile } from "./VenueProfile";
+import { useVenues } from "../../contexts/VenuesContext";
+import "react-toastify/dist/ReactToastify.css";
 
 function Venues() {
-  const [venues, setVenues] = useState([]);
-  const [selectedVenue, setSelectedVenue] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  {/* All venues */}
-  useEffect(() => {
-    fetch('http://localhost:8000/api/venues')
-      .then((response) => response.json())
-      .then((data) => {
-        setVenues(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError('Failed to load venues');
-        setLoading(false);
-        toast.error('Failed to fetch venues');
-      });
-  }, []);
-
-  const handleViewProfile = (id) => {
-    const venue = venues.find(v => v.id === id);
-    if (venue) setSelectedVenue(venue);
-  };
+  const { venues, selectedVenue, loading, error, handleViewProfile, setSelectedVenue } = useVenues();
 
   if (loading) return <p>Loading venues...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -39,8 +17,8 @@ function Venues() {
         <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
           Find Your Perfect Venue
         </h1>
-        
-        {/* mapping all venues */}
+
+        {/* Mapping all venues */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {venues.map((venue) => (
             <VenueCard
@@ -55,6 +33,7 @@ function Venues() {
           ))}
         </div>
 
+        {/* Show venue profile if selected */}
         {selectedVenue && (
           <VenueProfile
             venue={selectedVenue}

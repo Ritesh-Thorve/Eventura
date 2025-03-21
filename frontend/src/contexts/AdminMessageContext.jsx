@@ -7,7 +7,7 @@ const AdminMessageContext = createContext();
 export function AdminMessageProvider({ children }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState(null);
   const adminToken = localStorage.getItem("adminToken");
 
   useEffect(() => {
@@ -18,10 +18,18 @@ export function AdminMessageProvider({ children }) {
   const fetchMessages = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("http://localhost:8000/api/admin/messages");
-      setMessages(data);
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        throw new Error("Admin token not found");
+      }
+
+      const response = await axios.get("http://localhost:8000/api/admin/messages", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setMessages(response.data);
     } catch (error) {
-      toast.error("Failed to fetch messages");
+      setError("Failed to fetch messages"); 
     } finally {
       setLoading(false);
     }
@@ -61,6 +69,20 @@ export function AdminMessageProvider({ children }) {
     }
   };
 
+  // New function to handle message submission from the About component
+  const sendMessage = async (formData) => {
+    try {
+      const response = await axios.post("http://localhost:8000/api/messages/new-message", formData);
+      if (response.status === 201) {
+        toast.success("Message sent successfully!");
+        return true; // Indicate success
+      }
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+      return false; // Indicate failure
+    }
+  };
+
   return (
     <AdminMessageContext.Provider
       value={{
@@ -70,6 +92,7 @@ export function AdminMessageProvider({ children }) {
         markAsRead,
         deleteMessage,
         sendEmail,
+        sendMessage, // Add the new function to the context
       }}
     >
       {children}

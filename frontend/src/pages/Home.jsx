@@ -4,7 +4,6 @@ import FeaturedVenues from '../components/venues/FeaturedVenues';
 import VenueCategories from '../components/venues/VenueCategories';
 import BookingSteps from '../components/Booking/BookingSteps';
  
-
 export default function Home() { 
   const navigate = useNavigate(); 
 

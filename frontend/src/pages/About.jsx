@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Heart, Award, Users, MapPin, Clock, ArrowLeft } from "lucide-react";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { useAdminMessages } from "../contexts/AdminMessageContext"; // Import the context
 import "react-toastify/dist/ReactToastify.css";
 
 export default function About({ onBack }) {
@@ -11,6 +11,8 @@ export default function About({ onBack }) {
     message: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const { sendMessage } = useAdminMessages(); // Use the sendMessage function from context
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -26,24 +28,16 @@ export default function About({ onBack }) {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const response = await axios.post("http://localhost:8000/api/messages/new-message", formData);
-      if (response.status === 201) {
-        toast.success("Message sent successfully!");
-        setFormData({ name: "", email: "", message: "" }); // Clear the form
-      }
-    } catch (error) {
-      toast.error("Failed to send message. Please try again.");
-    } finally {
-      setLoading(false);
+    const success = await sendMessage(formData); // Use the context function
+    if (success) {
+      setFormData({ name: "", email: "", message: "" });  
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Toast Container */}
-      <ToastContainer />
-
+    <div className="min-h-screen bg-white"> 
       {/* Hero Section */}
       <div className="relative h-[50vh] bg-indigo-900">
         <img
