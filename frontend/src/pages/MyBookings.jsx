@@ -1,8 +1,10 @@
+// src/pages/MyBookings.jsx
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useBooking } from "../contexts/BookingContext";
+import { toast } from "react-toastify";
+
 import {
   MapPin,
   Calendar,
@@ -14,6 +16,7 @@ import {
   Loader2,
   CalendarCheck,
 } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -30,54 +33,26 @@ function MyBookings() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { bookings, loading, fetchUserBookings, deleteBooking } = useBooking();
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Fetch bookings when user is loaded
   useEffect(() => {
-    if (user) fetchBookings();
+    if (user) {
+      fetchUserBookings(user._id);
+    }
   }, [user]);
 
-  // Fetch bookings from backend
-  const fetchBookings = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8000/api/bookings/mybookings", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.data.length === 0) {
-        toast.alert("No bookings found. Book a venue now!");
-      }
-
-      setBookings(response.data);
-    } catch (error) {
-      toast.error("Failed to fetch bookings");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Open confirmation dialog
   const handleDeleteClick = (booking) => {
     setSelectedBooking(booking);
     setIsDialogOpen(true);
   };
 
-  // Confirm delete booking
   const confirmDelete = async () => {
     if (!selectedBooking) return;
-
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:8000/api/bookings/${selectedBooking._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      await deleteBooking(selectedBooking._id);
       toast.success("Booking deleted successfully");
-      fetchBookings(); // Refresh bookings after deletion
     } catch (error) {
       toast.error("Failed to delete booking");
     } finally {
@@ -86,7 +61,6 @@ function MyBookings() {
     }
   };
 
-  // Format date to readable format
   const formatDate = (dateString) => {
     if (!dateString) return "Not Set";
     const date = new Date(dateString);
@@ -101,7 +75,6 @@ function MyBookings() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-3 flex items-center justify-center gap-3">
             <CalendarCheck className="text-primary h-10 w-10 mt-1" />
@@ -112,14 +85,12 @@ function MyBookings() {
           </p>
         </div>
 
-        {/* Loading State */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
             <p className="text-slate-600 text-lg">Loading your bookings...</p>
           </div>
         ) : bookings.length > 0 ? (
-          // Show bookings
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {bookings.map((booking) => (
               <Card
@@ -135,7 +106,6 @@ function MyBookings() {
 
                 <CardContent className="pt-6 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Event Date */}
                     <div className="flex items-start gap-2">
                       <Calendar className="text-emerald-500 h-5 w-5 mt-0.5" />
                       <div>
@@ -144,7 +114,6 @@ function MyBookings() {
                       </div>
                     </div>
 
-                    {/* Event Type */}
                     <div className="flex items-start gap-2">
                       <Clock className="text-amber-500 h-5 w-5 mt-0.5" />
                       <div>
@@ -153,7 +122,6 @@ function MyBookings() {
                       </div>
                     </div>
 
-                    {/* Appointment Date */}
                     <div className="flex items-start gap-2">
                       <Calendar className="text-blue-500 h-5 w-5 mt-0.5" />
                       <div>
@@ -162,7 +130,6 @@ function MyBookings() {
                       </div>
                     </div>
 
-                    {/* Status */}
                     <div className="flex items-start gap-2">
                       <Info className="text-purple-500 h-5 w-5 mt-0.5" />
                       <div>
@@ -171,17 +138,15 @@ function MyBookings() {
                       </div>
                     </div>
 
-                    {/*number of booking days and venue price*/}
                     <div className="flex items-start gap-2">
-                    <Calendar className="text-pink-500 h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <Calendar className="text-pink-500 h-5 w-5 flex-shrink-0 mt-0.5" />
                       <div>
-                      <p className="text-base font-bold text-slate-700">Days</p>
-                      <p className="text-slate-600">
-                        {booking.numberOfDays} {booking.numberOfDays > 1 ? "days" : "day"}
-                      </p>
+                        <p className="text-base font-bold text-slate-700">Days</p>
+                        <p className="text-slate-600">
+                          {booking.numberOfDays} {booking.numberOfDays > 1 ? "days" : "day"}
+                        </p>
                       </div>
                     </div>
-
 
                     <div className="flex items-start gap-2">
                       <Info className="text-purple-500 h-5 w-5 mt-0.5" />
@@ -192,27 +157,25 @@ function MyBookings() {
                     </div>
                   </div>
 
-                    <Separator className="my-2" />
+                  <Separator className="my-2" />
 
-                    {/* Venue Contact */}
-                    <div className="space-y-2">
-                      <h3 className="font-bold text-slate-700">Venue Contact</h3>
-                      <div className="flex items-center gap-2">
-                        <Phone className="text-indigo-500 h-4 w-4" />
-                        <a href={`tel:${booking.venueContactPhone}`} className="text-slate-600 hover:text-indigo-500">
-                          {booking.venueContactPhone}
-                        </a>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Mail className="text-rose-500 h-4 w-4" />
-                        <a href={`mailto:${booking.venueContactEmail}`} className="text-slate-600 break-all hover:text-rose-500">
-                          {booking.venueContactEmail}
-                        </a>
-                      </div>
+                  <div className="space-y-2">
+                    <h3 className="font-bold text-slate-700">Venue Contact</h3>
+                    <div className="flex items-center gap-2">
+                      <Phone className="text-indigo-500 h-4 w-4" />
+                      <a href={`tel:${booking.venueContactPhone}`} className="text-slate-600 hover:text-indigo-500">
+                        {booking.venueContactPhone}
+                      </a>
                     </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="text-rose-500 h-4 w-4" />
+                      <a href={`mailto:${booking.venueContactEmail}`} className="text-slate-600 break-all hover:text-rose-500">
+                        {booking.venueContactEmail}
+                      </a>
+                    </div>
+                  </div>
                 </CardContent>
 
-                {/* Delete Booking */}
                 <CardFooter className="bg-slate-50 flex justify-end pt-4">
                   <Button
                     variant="destructive"
@@ -228,7 +191,6 @@ function MyBookings() {
             ))}
           </div>
         ) : (
-          // Empty State
           <div className="flex flex-col items-center justify-center bg-white shadow-lg rounded-3xl p-10 border border-gray-200">
             <img src="nobookings_found.png" alt="No Bookings" className="w-80 h-80 object-cover mb-4" />
             <h2 className="text-2xl font-semibold text-gray-700">No Bookings Found</h2>
@@ -243,7 +205,6 @@ function MyBookings() {
         )}
       </div>
 
-      {/* Confirmation Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

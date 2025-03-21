@@ -1,61 +1,88 @@
-import axios from 'axios';
-import { createContext, useState, useContext, useEffect } from 'react';
+// src/contexts/BookingContext.js
+import { createContext, useContext, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const BookingContext = createContext();
 
-export function BookingProvider({ children }) {
+export const BookingProvider = ({ children }) => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch bookings of the logged-in user
+  // Inside BookingContext.js
+const createBooking = async (bookingData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.post(
+      "http://localhost:8000/api/bookings/addbookings",
+      bookingData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setBookings((prev) => [...prev, response.data]); 
+    return response.data;
+  } catch (error) { 
+    throw error;
+  }
+};
+
+
+  // Fetch bookings for the logged-in user
   const fetchUserBookings = async (userId) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const { data } = await axios.get(`http://localhost:8000/api/bookings/user/${userId}`);
-      setBookings(data);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        "http://localhost:8000/api/bookings/mybookings",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.length === 0) {
+        toast.info("No bookings found. Book a venue now!");
+      }
+
+      setBookings(response.data);
     } catch (error) {
-      console.error('Failed to fetch bookings:', error);
+      toast.error("Failed to fetch bookings");
     } finally {
       setLoading(false);
     }
   };
 
-  // Add a new booking
-  const createBooking = async (bookingData) => {
-    try {
-      const { data } = await axios.post('http://localhost:8000/api/bookings/addbookings', bookingData);
-      setBookings((prev) => [...prev, data]);
-      return data;
-    } catch (error) {
-      console.error('Booking failed:', error);
-      throw error;
-    }
-  };
-
-  // Delete booking (optional)
+  // Delete a booking
   const deleteBooking = async (bookingId) => {
     try {
-      await axios.delete(`http://localhost:8000/api/bookings/delete/${bookingId}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:8000/api/bookings/${bookingId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       setBookings((prev) => prev.filter((b) => b._id !== bookingId));
     } catch (error) {
-      console.error('Failed to delete booking:', error);
+      throw new Error("Failed to delete booking");
     }
   };
-
 
   return (
     <BookingContext.Provider
       value={{
+        createBooking,
         bookings,
         loading,
         fetchUserBookings,
-        createBooking,
         deleteBooking,
       }}
     >
       {children}
     </BookingContext.Provider>
   );
-}
+};
 
 export const useBooking = () => useContext(BookingContext);
