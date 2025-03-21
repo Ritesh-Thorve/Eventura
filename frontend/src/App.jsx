@@ -21,44 +21,47 @@ import AdminRoute from './components/Auth/AdminRoute';
 import AdminLogin from './pages/AdminLogin'
 import NotFound from './pages/NotFound';
 import About from './pages/About';
+import { AdminProvider } from './contexts/StatsContext';
 
 function App() {
   return (
     <div>
       <Router>
-        <AuthProvider>
-          <AdminAuthProvider>
-            <VenuesProvider>
-            <AdminMessageProvider>
-              <BookingProvider>
-              <BookingsProvider> 
-                <div className="min-h-screen flex flex-col">
-                  <Navbar />
-                  <main className="flex-grow">
-                    <Routes>
-                      <Route path="/" element={<Home />} />
+        <AdminProvider>
+          <AuthProvider>
+            <AdminAuthProvider>
+              <VenuesProvider>
+                <AdminMessageProvider>
+                  <BookingProvider>
+                    <BookingsProvider>
+                      <div className="min-h-screen flex flex-col">
+                        <Navbar />
+                        <main className="flex-grow">
+                          <Routes>
+                            <Route path="/" element={<Home />} />
 
-                      
-                      <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-                      <Route path="/admin-login" element={<AdminLogin />} />
-                     
 
-                      <Route path="/venues" element={<Venues />} />
-                      <Route path="/about" element={<About />} />
-                      <Route path="/mybookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </main>
-                  <Footer />
-                </div>
-                </BookingsProvider>
-              </BookingProvider>
-            </AdminMessageProvider>
-            </VenuesProvider>
-          </AdminAuthProvider>
-        </AuthProvider>
+                            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                            <Route path="/admin-login" element={<AdminLogin />} />
+
+
+                            <Route path="/venues" element={<Venues />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/mybookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="*" element={<NotFound />} />
+                          </Routes>
+                        </main>
+                        <Footer />
+                      </div>
+                    </BookingsProvider>
+                  </BookingProvider>
+                </AdminMessageProvider>
+              </VenuesProvider>
+            </AdminAuthProvider>
+          </AuthProvider>
+        </AdminProvider>
       </Router>
       <ToastContainer
         position="top-right"
