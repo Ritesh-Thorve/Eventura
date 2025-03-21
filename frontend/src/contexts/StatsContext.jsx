@@ -12,30 +12,29 @@ export const AdminProvider = ({ children }) => {
 
   useEffect(() => {
     async function fetchStats() {
-        const token = localStorage.getItem("adminToken");
+      const token = localStorage.getItem("adminToken");
 
-        if (!token) {
-            setError("No admin token found. Please log in.");
-            setLoading(false);
-            return;
-        }
+      if (!token) {
+        setError("No admin token found. Please log in.");
+        setLoading(false);
+        return;
+      }
 
-        try {
-            const response = await axios.get("http://localhost:8000/api/admin/getstats", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setStats(response.data);
-        } catch (err) {
-            console.error("Fetch Error:", err.response?.data || err.message);
-            setError("Failed to fetch stats. Unauthorized or network issue.");
-        } finally {
-            setLoading(false);
-        }
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/getstats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStats(response.data);
+      } catch (err) {
+        console.error("Fetch Error:", err.response?.data || err.message);
+        setError("Failed to fetch stats. Unauthorized or network issue.");
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchStats();
-}, [localStorage.getItem("adminToken")]); // Re-run when token changes
-
+  }, []);
 
   return (
     <AdminContext.Provider value={{ activeComponent, setActiveComponent, stats, loading, error }}>
