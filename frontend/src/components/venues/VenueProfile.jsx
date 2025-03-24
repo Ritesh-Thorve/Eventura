@@ -21,7 +21,7 @@ export function VenueProfile({ venueId, onClose }) {
     if (venueId) {
       fetchVenueDetails(venueId);
     }
-  }, [venueId, fetchVenueDetails]);
+  }, []);
 
   if (venueLoading) {
     return <div className="text-center py-10">Loading venue details...</div>;
