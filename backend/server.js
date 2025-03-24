@@ -14,13 +14,12 @@ connectDB();
 const app = express();
 app.use(express.json());
 //change the origin to the frontend url
-app.use(cors(
-    {
-        origin: 'http://localhost:3000',
-        merthods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        credentials: true
-    }
-));
+app.use(cors({
+    origin: process.env.FRONTEND_URL,  
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true
+}));
+
  
 app.use('/api/auth', authRoute);
 app.use('/api/venues', venueRoute);
