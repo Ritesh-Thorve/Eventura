@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const VenuesContext = createContext();
 
 export const VenuesProvider = ({ children }) => {
+  const URL = import.meta.env.VITE_API_URL;
   // State for managing venues  
   const [venues, setVenues] = useState([]);
   const [selectedVenue, setSelectedVenue] = useState(null);
@@ -47,7 +48,7 @@ export const VenuesProvider = ({ children }) => {
   // Fetch venue details for VenueProfile
   const fetchVenueDetails = async (venueId) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/venues/${venueId}`);
+      const response = await axios.get(`${URL}/venues/${venueId}`);
       setVenueDetails(response.data);
     } catch (err) {
       setVenueError("Failed to fetch venue details");
@@ -78,7 +79,7 @@ export const VenuesProvider = ({ children }) => {
 
   const fetchVenues = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/venues");
+      const response = await axios.get(`${URL}/venues`);
       setVenues(response.data);
       setLoading(false);
     } catch (err) {
@@ -151,7 +152,7 @@ export const VenuesProvider = ({ children }) => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post("http://localhost:8000/api/admin/addvenue", formData);
+      const response = await axios.post(`${URL}/admin/addvenue`, formData);
       setVenues([...venues, response.data]);
       setIsAddDialogOpen(false);
       resetFormData();
@@ -167,7 +168,7 @@ export const VenuesProvider = ({ children }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/admin/updatevenue/${selectedVenue._id}`,
+        `${URL}/admin/updatevenue/${selectedVenue._id}`,
         formData
       );
       setVenues(venues.map((venue) => (venue._id === selectedVenue._id ? response.data.updatedVenue : venue)));
@@ -181,7 +182,7 @@ export const VenuesProvider = ({ children }) => {
 
   const handleDeleteVenue = async () => {
     try {
-      await axios.delete(`http://localhost:8000/api/admin/delete/${selectedVenue._id}`);
+      await axios.delete(`${URL}/admin/delete/${selectedVenue._id}`);
       setVenues(venues.filter((venue) => venue._id !== selectedVenue._id));
       setIsDeleteDialogOpen(false);
       toast.success("Venue deleted successfully!");

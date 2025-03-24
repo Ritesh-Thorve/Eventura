@@ -6,7 +6,8 @@ const AdminAuthContext = createContext();
 
 export function AdminAuthProvider({ children }) {
   const [admin, setAdmin] = useState(localStorage.getItem('adminToken') || null);
-  const navigate = useNavigate(); // To redirect after logout
+  const navigate = useNavigate();  
+  const URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = admin ? `Bearer ${admin}` : '';
@@ -14,7 +15,7 @@ export function AdminAuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post('http://localhost:8000/api/admin/login', { email, password });
+      const { data } = await axios.post(`${URL}/admin/login`, { email, password });
       localStorage.setItem('adminToken', data.token);
       setAdmin(data.token);
     } catch (error) {

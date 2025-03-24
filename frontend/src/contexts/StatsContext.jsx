@@ -9,6 +9,7 @@ export const AdminProvider = ({ children }) => {
   const [stats, setStats] = useState({ totalBookings: 0, totalVenues: 0, newMessages: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     async function fetchStats() {
@@ -21,7 +22,7 @@ export const AdminProvider = ({ children }) => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:8000/api/admin/getstats`, {
+        const response = await axios.get(`${URL}/getstats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStats(response.data);

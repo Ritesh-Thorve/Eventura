@@ -9,6 +9,7 @@ export function AdminMessageProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const adminToken = localStorage.getItem("adminToken");
+  const URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = adminToken ? `Bearer ${adminToken}` : "";
@@ -23,7 +24,7 @@ export function AdminMessageProvider({ children }) {
         throw new Error("Admin token not found");
       }
 
-      const response = await axios.get("http://localhost:8000/api/admin/messages", {
+      const response = await axios.get(`${URL}/admin/messages`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -37,7 +38,7 @@ export function AdminMessageProvider({ children }) {
 
   const markAsRead = async (id) => {
     try {
-      await axios.put(`http://localhost:8000/api/admin/messages/${id}/read`);
+      await axios.put(`${URL}/admin/messages/${id}/read`);
       setMessages((prev) =>
         prev.map((msg) => (msg._id === id ? { ...msg, isRead: true } : msg))
       );
@@ -49,7 +50,7 @@ export function AdminMessageProvider({ children }) {
 
   const deleteMessage = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/admin/messages/${id}`);
+      await axios.delete(`${URL}/admin/messages/${id}`);
       setMessages((prev) => prev.filter((msg) => msg._id !== id));
       toast.success("Message deleted");
     } catch (error) {
@@ -59,7 +60,7 @@ export function AdminMessageProvider({ children }) {
 
   const sendEmail = async (email, message) => {
     try {
-      await axios.post("http://localhost:8000/api/admin/send-mail", {
+      await axios.post(`${URL}/admin/send-mail`, {
         email,
         message,
       });
@@ -72,7 +73,7 @@ export function AdminMessageProvider({ children }) {
   // New function to handle message submission from the About component
   const sendMessage = async (formData) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/messages/new-message", formData);
+      const response = await axios.post(`${URL}/messages/new-message`, formData);
       if (response.status === 201) {
         toast.success("Message sent successfully!");
         return true; // Indicate success

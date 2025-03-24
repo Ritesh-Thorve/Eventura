@@ -8,6 +8,7 @@ const BookingContext = createContext();
 export const BookingProvider = ({ children }) => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const URL = import.meta.env.VITE_API_URL;
 
   // Inside BookingContext.js
 const createBooking = async (bookingData) => {
@@ -15,7 +16,7 @@ const createBooking = async (bookingData) => {
     const token = localStorage.getItem("token");
 
     const response = await axios.post(
-      "http://localhost:8000/api/bookings/addbookings",
+      `${URL}/bookings/addbookings`,
       bookingData,
       {
         headers: {
@@ -38,7 +39,7 @@ const createBooking = async (bookingData) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://localhost:8000/api/bookings/mybookings",
+        `${URL}/bookings/mybookings`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -60,7 +61,7 @@ const createBooking = async (bookingData) => {
   const deleteBooking = async (bookingId) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:8000/api/bookings/${bookingId}`, {
+      await axios.delete(`${URL}/bookings/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

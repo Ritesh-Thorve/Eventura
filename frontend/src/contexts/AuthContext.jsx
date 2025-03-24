@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const URL = import.meta.env.VITE_API_URL;
 
   // Fetch user data on initial load if token exists
   useEffect(() => {
@@ -21,7 +22,7 @@ export function AuthProvider({ children }) {
   // Fetch user data from the backend
   const fetchUser = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/auth/me", {
+      const response = await axios.get(`${URL}/auth/me`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setUser(response.data);
@@ -36,7 +37,7 @@ export function AuthProvider({ children }) {
   // Login function
   const login = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", { email, password });
+      const response = await axios.post(`${URL}/auth/login`, { email, password });
       localStorage.setItem("token", response.data.token);
       setUser(response.data.user);
       toast.success("Logged in successfully!");
@@ -49,7 +50,7 @@ export function AuthProvider({ children }) {
   // Register function
   const register = async (name, email, password) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/register", {
+      const response = await axios.post(`${URL}/auth/register`, {
         name,
         email,
         password,
