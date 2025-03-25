@@ -49,7 +49,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
+// Routes for the API
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
