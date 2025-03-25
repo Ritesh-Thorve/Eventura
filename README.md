@@ -1,9 +1,12 @@
 # 🎉 Eventura – Smart Venue Booking & Event Management 🎊
 
+
 ## 🚀 Introduction
+
 **Eventura** is a full-stack **MERN** platform designed to simplify **venue booking and event management**. It provides users with a seamless experience to explore, book, and manage venues, while offering admins a **powerful dashboard** to approve/reject bookings, manage venues, and handle user interactions.
 
 ## 🌐 Live Demo
+
 - 🔗 **Frontend:** [https://eventura-official.vercel.app]
 - 🔗 **Backend API:** [https://eventura-backend.vercel.app/]
 
