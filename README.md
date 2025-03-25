@@ -1,43 +1,28 @@
-# 🎉 Eventura - Event Management Platform
+## Eventura – Smart Venue Booking & Event Management 🎉
 
 Eventura is a full-stack event management platform where users can explore and book various venues like hotels, banquet halls, gardens, and more for their special occasions. It provides a seamless booking experience and a powerful admin dashboard for venue management and booking approval.
 
+🚀 Live Demo
+🔗 go live : [https://eventura-official.vercel.app/]
+ 
 ---
 
 ## 🌟 Features
-
-### 🧑‍💼 User Side
-- Browse venue listings with details and images.
-- Book a venue by filling out a simple form.
-- Contact venue manager via email or mobile number.
-
-### 🔐 Admin Side
-- Secure admin login and authentication.
-- View all user bookings in a dashboard.
-- Accept or reject booking requests.
-- Register and manage venues.
-- Read and manage contact messages.
-- Send emails to users directly from the dashboard.
-- Delete bookings or messages.
+✅ Venue Management – Browse, book, and manage event spaces effortlessly
+✅ Admin Dashboard – Approve/reject bookings, manage venues, and send emails
+✅ Secure Authentication – Role-based access for users and admins with JWT
+✅ Optimized State Management – Efficient API handling with React Context API 
+✅ Scalable & Deployment-Ready – Hosted on Vercel & Render for production use
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- React.js
-- TailwindCSS
-- Framer Motion
-- Lucide Icons
-- Axios
-
-### Backend
-- Node.js
-- Express.js (CommonJS)
-- MongoDB   
-- JWT Authentication
-- CORS
-
+🔹 Frontend: React.js, Tailwind CSS, Framer Motion, React Context API
+🔹 Backend: Node.js, Express.js, MongoDB, Mongoose
+🔹 Authentication: JWT (JSON Web Tokens), Role-Based Access Control
+🔹 Database: MongoDB Atlas
+🔹 Deployment: Vercel (Frontend) & Render/Railway (Backend)
 ---
 
 ## 🗂️ Project Structure
@@ -81,7 +66,8 @@ npm install
 ```env
 PORT=8000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret 
+JWT_SECRET=your_secret_key
+FRONTEND_URL=your_vercel_frontend_url
 ```
 
 - Start backend server:
@@ -148,8 +134,6 @@ Contributions are welcome!
 ## 🙋‍♂️ Author
 
 Developed by Ritesh Thorve.
-
-GitHub: https://github.com/Ritesh-Thorve
 
 Feel free to reach out and connect!
 
