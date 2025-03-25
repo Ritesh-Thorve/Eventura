@@ -32,7 +32,10 @@ app.use((req, res, next) => {
 });
 
 
- 
+app.get(('/', (req,res) => {
+    res.send('Welcome to Eventura API');
+}));
+
 app.use('/api/auth', authRoute);
 app.use('/api/venues', venueRoute);
 app.use('/api/bookings', bookingRoute);
