@@ -74,12 +74,12 @@ FRONTEND_URL=your_vercel_frontend_url
 ### 🚀 4. Run the Application
 #### 🖥️ Frontend (React)
 ```sh
-cd client
+cd frontend
 npm start
 ```
 #### 🌐 Backend (Express)
 ```sh
-cd server
+cd backend
 npm start
 ```
 
@@ -90,9 +90,9 @@ npm install -g vercel
 vercel
 ```
 
-### ☁️ Backend on Render/Railway
+### ☁️ Backend on Vercel
 1. 📤 Push backend code to GitHub.
-2. 🚀 Deploy as a **Web Service** on **Render/Railway**.
+2. 🚀 Deploy as a **backend** on **Vercel**.
 3. 🔧 Set up **environment variables**.
 
 
