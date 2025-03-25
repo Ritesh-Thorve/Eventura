@@ -1,8 +1,10 @@
 # 🎉 Eventura – Smart Venue Booking & Event Management 🎊
 
+-
 
 ## 🚀 Introduction
 
+-
 **Eventura** is a full-stack **MERN** platform designed to simplify **venue booking and event management**. It provides users with a seamless experience to explore, book, and manage venues, while offering admins a **powerful dashboard** to approve/reject bookings, manage venues, and handle user interactions.
 
 ## 🌐 Live Demo
@@ -10,12 +12,16 @@
 - 🔗 **Frontend:** [https://eventura-official.vercel.app]
 - 🔗 **Backend API:** [https://eventura-backend.vercel.app/]
 
+--
+
 ## ✨ Features
 - 🏢 **Venue Management** – Browse, book, and manage event spaces effortlessly.
 - 🎛 **Admin Dashboard** – Manage bookings, venues, and customer requests.
 - 🔐 **Secure Authentication** – Role-based access for users and admins using JWT.
 - ⚡ **Optimized State Management** – Utilized React Context API for efficiency.
 - 🚀 **Scalable & Deployment-Ready** – Hosted on Vercel & Render for production use.
+
+--
 
 ## 🛠 Tech Stack
 ### 🎨 Frontend:
@@ -37,10 +43,12 @@
 - **Frontend:** 🌍 Vercel
 - **Backend:**  🌍 Vercel
 
+--
+
 ## ⚡ Installation & Setup
 ### 🛠 1. Clone the Repository
 ```sh
-git clone https://github.com/your-username/eventura.git
+git clone  https://github.com/Ritesh-Thorve/Eventura.git
 cd eventura
 ```
 
