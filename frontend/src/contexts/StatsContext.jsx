@@ -22,8 +22,8 @@ export const AdminProvider = ({ children }) => {
       }
 
       try {
-        const response = await axios.get(`${URL}/getstats`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.get(`${URL}/admin/getstats`, {
+          headers: { Authorization: `Bearer ${token}` },  
         });
         setStats(response.data);
       } catch (err) {

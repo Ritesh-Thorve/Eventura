@@ -31,6 +31,6 @@ router.get('/getstats', adminAuth, getStats);
 router.get("/messages", adminAuth, getMessages);
 router.put("/messages/:id/read", adminAuth, markAsRead);
 router.delete("/messages/:id", adminAuth, deleteMessage);
-router.post("/send-mail", adminAuth, sendMail);
+router.post("/messages/send-mail", adminAuth, sendMail);
 
 module.exports = router;

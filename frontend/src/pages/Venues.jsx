@@ -6,7 +6,6 @@ import { useVenues } from '../contexts/VenuesContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Venues() {
-  // Use context API instead of local state for venues
   const { venues, loading, error, handleViewProfile } = useVenues();
   const [selectedVenueId, setSelectedVenueId] = useState(null);
 

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2, User, Mail, Lock } from "lucide-react";
 import { motion } from "framer-motion";
-import { useAuth } from "../contexts/AuthContext"; // Import the AuthContext
+import { useAuth } from "../contexts/AuthContext"; 
 import { toast } from "react-toastify";
 
 export default function Register() {
   const navigate = useNavigate();
-  const { register } = useAuth(); // Use the register function from AuthContext
+  const { register } = useAuth();  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,12 +35,10 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await register(formData.name, formData.email, formData.password); // Use the register function from AuthContext
-      toast.success("Registration successful! You are now logged in.");
+      await register(formData.name, formData.email, formData.password); 
       navigate("/"); // Redirect to home page after successful registration
     } catch (err) {
       setError("Failed to create account. Please try again.");
-      toast.error("Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -18,12 +18,11 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await login(email, password);
-      toast.success("Login successful!" );
+      await login(email, password); 
       navigate('/'); 
       window.location.reload();
     } catch (err) {
-      toast.error("Invalid email or password");
+      console.error("Check credentials", err);
     } finally {
       setLoading(false);
     }

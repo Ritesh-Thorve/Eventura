@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
       setUser(response.data);
     } catch (error) { 
       setUser(null);
-      localStorage.removeItem("token"); // Clear invalid token
+      localStorage.removeItem("token");  
     } finally {
       setIsLoading(false);
     }
@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
       const response = await axios.post(`${URL}/auth/login`, { email, password });
       localStorage.setItem("token", response.data.token);
       setUser(response.data.user);
-      toast.success("Logged in successfully!");
+       toast.success("Login successful. Welcome back!");
     } catch (error) { 
       toast.error("Login failed. Please check your credentials.");
       throw error; // Re-throw the error for handling in the component
@@ -57,9 +57,10 @@ export function AuthProvider({ children }) {
       });
       localStorage.setItem("token", response.data.token);
       setUser(response.data.user); 
+      toast.success("Registration successful. Welcome to Eventura!");
     } catch (error) { 
       toast.error("Registration failed. Please try again.");
-      throw error; // Re-throw the error for handling in the component
+      throw error;  
     }
   };
 

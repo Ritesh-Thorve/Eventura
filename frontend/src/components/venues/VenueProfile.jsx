@@ -50,7 +50,7 @@ export function VenueProfile({ venueId, onClose }) {
               src={venueDetails.imageUrl}
               alt={venueDetails.name}
               className="w-full h-64 object-cover"
-              onError={(e) => (e.target.src = "/default-image.jpg")} // Fallback image
+              onError={(e) => (e.target.src = "/default-image.jpg")}  
             />
           </div>
 
