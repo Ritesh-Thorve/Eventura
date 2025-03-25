@@ -27,7 +27,7 @@ export function AdminAuthProvider({ children }) {
     localStorage.removeItem('adminToken');
     setAdmin(null);
     delete axios.defaults.headers.common['Authorization'];  
-    navigate('/admin/login');  
+    navigate('/');  
   };
 
   return (
