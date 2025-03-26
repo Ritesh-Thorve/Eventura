@@ -66,7 +66,7 @@ const sendMail = async (req, res) => {
       service: "Gmail",
       auth: {
         user: process.env.EMAIL_ADMIN, // Your Gmail address
-        pass: process.env.EMAIL_PASS,  // App Password (not your Gmail password) creat at                     https://myaccount.google.com/apppasswords
+        pass: process.env.EMAIL_PASS,  // App Password (not your Gmail password) creat at  https://myaccount.google.com/apppasswords
       },
     });
 
