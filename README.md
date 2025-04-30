@@ -55,11 +55,11 @@ cd eventura
 ### 📦 2. Install Dependencies
 ```sh
 # Install frontend dependencies
-cd client
+cd frontend
 npm install  
 
 # Install backend dependencies
-cd ../server
+cd backend
 npm install
 ```
 
@@ -75,7 +75,7 @@ FRONTEND_URL=your_vercel_frontend_url
 #### 🖥️ Frontend (React)
 ```sh
 cd frontend
-npm start
+npm run dev
 ```
 #### 🌐 Backend (Express)
 ```sh
